@@ -7,14 +7,14 @@
 
 import Foundation
 
-struct DateRegex {
-    enum PatternType {
-        case DMY
-        case MDY
-        case YMD
-    }
-    
-    let type: PatternType
-    let pattern: String
+public enum DateFormatType {
+    case DMY
+    case MDY
+    case YMD
+}
+
+public struct DateRegex {
+    public let formatType: DateFormatType
+    public let pattern: String
 }
 

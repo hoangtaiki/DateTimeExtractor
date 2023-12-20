@@ -23,8 +23,8 @@ public struct DateFormatComponents {
         self.year = yearValue.count == 2 ? "yy" : "yyyy"
     }
 
-    func getFormatWithPatternType(_ patternType: DateRegex.PatternType) -> String {
-        switch patternType {
+    func getFormatWithType(_ formatType: DateFormatType) -> String {
+        switch formatType {
         case .DMY:
             return "\(day)/\(month)/\(year)"
         case .MDY:

@@ -7,12 +7,26 @@
 
 import Foundation
 
-struct TimeExtractor: DateTimeExtractable {
+public struct ExtractedTimeResult: Hashable {
+    let originalString: String
+    let formatedString: String
+    let format: String
+    let range: NSRange
+    
+    public static func == (lhs: ExtractedTimeResult, rhs: ExtractedTimeResult) -> Bool {
+        return lhs.originalString == rhs.originalString
+        && lhs.formatedString == rhs.formatedString
+        && lhs.format == rhs.format
+        && rhs.range == lhs.range
+    }
+}
+
+public struct TimeExtractor {
     
     private let regexPattern: String = "(?:^|\\s|-)\\b((?:1[012]|0?[1-9]):([0-5][0-9])(?::[0-5][0-9])?((\\s?(am|pm))|(a|p))?|((1[3-9]|2[0-3]):[0-5][0-9](?::[0-5][0-9])?))\\b(?:(?!:))"
     
-    func extractDateStringAndFormat(string: String) -> [ExtractedDateResult] {
-        var timeStringFormats = Set<ExtractedDateResult>()
+    func extractDateStringAndFormat(string: String) -> [ExtractedTimeResult] {
+        var timeStringFormats = Set<ExtractedTimeResult>()
 
         let matchedResults = extractStringWithRegex(string: string, regexPattern: regexPattern)
         if !matchedResults.isEmpty {
@@ -68,9 +82,9 @@ struct TimeExtractor: DateTimeExtractable {
                     }
                 }
                 
-                let format = ExtractedDateResult(originalString: matchedResult.string,
+                let format = ExtractedTimeResult(originalString: matchedResult.string,
                                                  formatedString: formatComponents.getFormattedString(),
-                                                 dateFormat: formatComponents.getFormat(),
+                                                 format: formatComponents.getFormat(),
                                                  range: matchedResult.range)
                 timeStringFormats.insert(format)
             }

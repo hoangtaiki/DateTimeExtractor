@@ -1,38 +1,33 @@
 //
-//  DateTimeExtractable.swift
-//  
+//  DateExtractable.swift
+//
 //
 //  Created by Harry Tran on 19/12/2023.
 //
 
 import Foundation
 
-public struct MatchedResult {
-    let string: String
-    let range: NSRange
-}
-
 public struct ExtractedDateResult: Hashable {
     let originalString: String
     let formatedString: String
-    let dateFormat: String
+    let format: String
     let range: NSRange
     
     public static func == (lhs: ExtractedDateResult, rhs: ExtractedDateResult) -> Bool {
         return lhs.originalString == rhs.originalString 
         && lhs.formatedString == rhs.formatedString
-        && lhs.dateFormat == rhs.dateFormat
+        && lhs.format == rhs.format
         && rhs.range == lhs.range
     }
 }
 
-public protocol DateTimeExtractable {
+public protocol DateExtractable {
     func extractDateStringAndFormat(string: String) -> [ExtractedDateResult]
     func extractStringWithRegex(string: String, regexPattern: String) -> [MatchedResult]
     func detectDateSeparator(string: String) -> String?
 }
 
-public extension DateTimeExtractable {
+public extension DateExtractable {
     
     func extractStringWithRegex(string: String, regexPattern: String) -> [MatchedResult] {
         guard let regex = try? NSRegularExpression(pattern: regexPattern, options: []) else {
