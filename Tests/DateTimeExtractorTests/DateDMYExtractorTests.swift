@@ -13,59 +13,27 @@ final class DateDMYExtractorTests: XCTestCase {
     private let extractor = DateDMYExtractor()
     private let data = TestsData()
 
-    func test_InvalidDate_MonthNumberString_ShouldNot_Recognize() {
+    func test_InvalidDate_ShouldNot_Recognize() {
         let dateStrings = [
             // Slash
-            "32/31/23", "31/32/23", "12/00/23", "0/1/23", "12/31/213", "12/311/2023",
-            "121/31/2023", "12/0/2023", "0/31/2023", "12/31/023", "12/31/203", "1/1/223",
-            "d31/12/23", "31/12/23d", "d31/12/2023", "31/12/2023d",
+            "32/12/23", "32/12/2023", "00/12/23", "0/12/2023", "01/01/1599", "28/2/10001",
+            "32/jan/23", "0/november/2023", "00/dec/23", "01/december/20234", "301/1/1923",
+            "d31/12/2023", "31/12/2023d", "31/12/23d", "invalidecember/31/2023", "01/1/223",
             // Dot
-            "32.31.23", "31.32.23", "12.00.23", "0.1.23", "12.31.213", "12.311.2023",
-            "121.31.2023", "12.0.2023", "0.31.2023", "12.31.023", "12.31.203", "1.1.223",
-            "d31.12.23", "31.12.23d", "d31.12.2023", "31.12.2023d",
+            "32.12.23", "32.12.2023", "00.12.23", "0.12.2023", "01.01.1599", "28.2.10001",
+            "32.jan.23", "0.november.2023", "00.dec.23", "01.december.20234", "301.1.1923",
+            "d31.12.2023", "31.12.2023d", "31.12.23d", "invalidecember.31.2023", "01.1.223",
             // Hyphen
-            "32-31-23", "31-32-23", "12-00-23", "0-1-23", "12-31-213", "12-311-2023",
-            "121-31-2023", "12-0-2023", "0-31-2023", "12-31-023", "12-31-203", "1-1-223",
-            "d31-12-23", "31-12-23d", "d31-12-2023", "31-12-2023d",
-            // Mixing
-            "12.31/23", "12-31/23", "12.31/23", "12/31.23", "12-31.23", "12/31-23", "12/31-223",
-            "12-31/2023", "12.31/2023", "12.31/2023", "12/31.2023", "12-31.2023", "12/31-2023", "31 12 2023"
-        ]
-        for (index, dateString) in dateStrings.enumerated() {
-            let results = extractor.extractDateStringAndFormat(string: dateString)
-            let message = "Fail with \(dateString). Index \(index)"
-            XCTAssertTrue(results.isEmpty, message)
-        }
-    }
-    
-    func test_InvalidDate_MonthNameString_ShouldNot_Recognize() {
-        let dateStrings = [
-            // Slash
-            "dec/32/23", "dec/0/23", "dec/00/23", "december/32/23", "december/0/23", "december/00/23",
-            "dec/32/2023", "dec/0/2023", "dec/00/2023", "december/32/2023", "december/0/2023", "december/00/2023",
-            "ddec/31/23", "ddecember/32/2023", "december/32/20232",
-            "december/31/2023/2", "this is invalidecember/31/2023/december/31/2023",
-            // Dot
-            "dec.32.23", "dec.0.23", "dec.00.23", "december.32.23", "december.0.23", "december.00.23",
-            "dec.32.2023", "dec.0.2023", "dec.00.2023", "december.32.2023", "december.0.2023", "december.00.2023",
-            "ddec.31.23", "ddecember.32.2023", "december.32.20232", "december.31.2023.2",
-            "this is invalidecember.31.2023.december.31.2023",
-            // Hyphen
-            "dec-32-23", "dec-0-23", "dec-00-23", "december-32-23", "december-0-23", "december-00-23",
-            "dec-32-2023", "dec-0-2023", "dec-00-2023", "december-32-2023", "december-0-2023", "december-00-2023",
-            "ddec-31-23", "ddecember-32-2023", "december-32-20232",
-            "december-31-2023-2", "this is invalidecember-31-2023-2", "this is invalidecember-31-2023-dec-31-23",
+            "32-12-23", "32-12-2023", "00-12-23", "0-12-2023", "01-01-1599", "28-2-10001",
+            "32-jan-23", "0-november-2023", "00-dec-23", "01-december-20234", "301-1-1923",
+            "d31-12-2023", "31-12-2023d", "31-12-23d", "invalidecember-31-2023", "01-1-223",
             // Space
-            "dec 32 23", "dec 0 23", "dec 00 23", "december 32 23", "december 0 23", "december 00 23",
-            "dec 32 2023", "dec 0 2023", "dec 00 2023", "december 32 2023", "december 0 2023", "december 00 2023",
-            "ddec 31 23", "ddecember 32 2023", "december 32 20232",
-            "ddec31 23", "sdecember31 23", "dec31 233", " dec31 232 ", " december312 23",
-            "dec 1 23", "december 1 2023", "dec 1 23", "december 1 23",
-            "this is invalidecember 31 2023", "this is invalidec 31 23 december",
+            "32 12 23", "32 12 2023", "00 12 23", "0 12 2023", "01 01 1599", "28 2 10001",
+            "32 jan 23", "0 november 2023", "00 dec 23", "01 december 20234", "301 1 1923",
+            "d31 12 2023", "31 12 2023d", "31 12 23d", "invalidecember 31 2023", "01 1 223",
             // Mixing
-            "dec 31/23", "december 31/23", "dec.31/23", "dec/31.23", "december-31.23", "dec/31-23", "dec/31-223",
-            "dec 31/2023", "dec 31/2023", "dec.31/2023", "dec/31.2023", "dec-31.2023", "dec/31-2023",
-            "dec31.23", "dec31-23", "dec31-2023", "december31/23"
+            "31/12.23", "01/02 1992", "28/2-1898", "1.5/12", "30.oct 1782", "28.feb-2024",
+            "02-may/13", "30-september.1990", "10-02 23", "01 01 23", "31 12 2023",
         ]
         for (index, dateString) in dateStrings.enumerated() {
             let results = extractor.extractDateStringAndFormat(string: dateString)
