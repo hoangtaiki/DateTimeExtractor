@@ -8,9 +8,9 @@
 import Foundation
 
 public struct DateFormatComponents {
-    public var day: String = ""
-    public var month: String = ""
-    public var year: String = ""
+    public private(set) var day: String = ""
+    public private(set) var month: String = ""
+    public private(set) var year: String = ""
     
     init(dayValue: String, monthValue: String, yearValue: String) {
         self.day = dayValue.count == 2 ? "dd" : "d"
