@@ -39,10 +39,11 @@ struct DateMDYExtractor: DateExtractable {
                     let dateComponents = extractedString.components(separatedBy: separator)
                     let formatComponents = DateFormatComponents(dayValue: dateComponents[1],
                                                                 monthValue: dateComponents[0],
-                                                                yearValue: dateComponents[2])
+                                                                yearValue: dateComponents[2],
+                                                                formatType: .MDY)
                     let format = ExtractedDateResult(originalString: matchedResult.string,
                                                      formatedString: dateComponents.joined(separator: "/"),
-                                                     format: formatComponents.getFormatWithType(.MDY),
+                                                     format: formatComponents.getFormat(),
                                                      range: matchedResult.range)
                     dateStringFormats.insert(format)
                 }

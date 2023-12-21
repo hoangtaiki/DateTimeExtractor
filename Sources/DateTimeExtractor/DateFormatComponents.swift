@@ -11,8 +11,9 @@ public struct DateFormatComponents {
     public private(set) var day: String = ""
     public private(set) var month: String = ""
     public private(set) var year: String = ""
-    
-    init(dayValue: String, monthValue: String, yearValue: String) {
+    public private(set) var formatType: DateFormatType = .DMY
+
+    init(dayValue: String, monthValue: String, yearValue: String, formatType: DateFormatType) {
         self.day = dayValue.count == 2 ? "dd" : "d"
         self.month = switch monthValue.count {
             case 1: "M"
@@ -21,9 +22,10 @@ public struct DateFormatComponents {
             default: "MMMM"
         }
         self.year = yearValue.count == 2 ? "yy" : "yyyy"
+        self.formatType = formatType
     }
 
-    func getFormatWithType(_ formatType: DateFormatType) -> String {
+    func getFormat() -> String {
         switch formatType {
         case .DMY:
             return "\(day)/\(month)/\(year)"
