@@ -7,19 +7,6 @@
 
 import Foundation
 
-public struct ExtractedDateResult: Hashable {
-    let originalString: String
-    let range: NSRange
-    let formatComponents: DateFormatComponents
-
-    public static func == (lhs: ExtractedDateResult, rhs: ExtractedDateResult) -> Bool {
-        return lhs.originalString == rhs.originalString
-        && lhs.range == rhs.range
-        && lhs.formatComponents.getFormat() == rhs.formatComponents.getFormat()
-        && lhs.formatComponents.getFormattedString() == rhs.formatComponents.getFormattedString()
-    }
-}
-
 public protocol DateExtractable {
     func extractDateStringAndFormat(string: String) -> [ExtractedDateResult]
     func extractStringWithRegex(string: String, regexPattern: String) -> [MatchedResult]

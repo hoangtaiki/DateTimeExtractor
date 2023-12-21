@@ -27,7 +27,7 @@ struct DateDMYExtractor: DateExtractable {
     ]
     
     func extractDateStringAndFormat(string: String) -> [ExtractedDateResult] {
-        var dateStringFormats = Set<ExtractedDateResult>()
+        var results = [ExtractedDateResult]()
         
         for regex in regexes {
             let matchedResults = extractStringWithRegex(string: string, regexPattern: regex.pattern)
@@ -44,11 +44,11 @@ struct DateDMYExtractor: DateExtractable {
                     let format = ExtractedDateResult(originalString: matchedResult.string,
                                                      range: matchedResult.range,
                                                      formatComponents: formatComponents)
-                    dateStringFormats.insert(format)
+                    results.append(format)
                 }
             }
         }
         
-        return Array(dateStringFormats)
+        return results
     }
 }
