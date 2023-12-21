@@ -42,9 +42,8 @@ struct DateMDYExtractor: DateExtractable {
                                                                 yearValue: dateComponents[2],
                                                                 formatType: .MDY)
                     let format = ExtractedDateResult(originalString: matchedResult.string,
-                                                     formatedString: dateComponents.joined(separator: "/"),
-                                                     format: formatComponents.getFormat(),
-                                                     range: matchedResult.range)
+                                                     range: matchedResult.range,
+                                                     formatComponents: formatComponents)
                     dateStringFormats.insert(format)
                 }
             }

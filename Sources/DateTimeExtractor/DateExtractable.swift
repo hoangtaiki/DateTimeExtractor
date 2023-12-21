@@ -9,15 +9,14 @@ import Foundation
 
 public struct ExtractedDateResult: Hashable {
     let originalString: String
-    let formatedString: String
-    let format: String
     let range: NSRange
-    
+    let formatComponents: DateFormatComponents
+
     public static func == (lhs: ExtractedDateResult, rhs: ExtractedDateResult) -> Bool {
-        return lhs.originalString == rhs.originalString 
-        && lhs.formatedString == rhs.formatedString
-        && lhs.format == rhs.format
-        && rhs.range == lhs.range
+        return lhs.originalString == rhs.originalString
+        && lhs.range == rhs.range
+        && lhs.formatComponents.getFormat() == rhs.formatComponents.getFormat()
+        && lhs.formatComponents.getFormattedString() == rhs.formatComponents.getFormattedString()
     }
 }
 

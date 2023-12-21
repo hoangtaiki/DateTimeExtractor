@@ -42,9 +42,8 @@ struct DateDMYExtractor: DateExtractable {
                                                                 yearValue: dateComponents[2],
                                                                 formatType: .DMY)
                     let format = ExtractedDateResult(originalString: matchedResult.string,
-                                                     formatedString: dateComponents.joined(separator: "/"),
-                                                     format: formatComponents.getFormat(),
-                                                     range: matchedResult.range)
+                                                     range: matchedResult.range,
+                                                     formatComponents: formatComponents)
                     dateStringFormats.insert(format)
                 }
             }
