@@ -25,7 +25,7 @@ public struct TimeExtractor {
     
     private let regexPattern: String = "(?:^|\\s|-)\\b((?:1[012]|0?[1-9]):([0-5][0-9])(?::[0-5][0-9])?((\\s?(am|pm))|(a|p))?|((1[3-9]|2[0-3]):[0-5][0-9](?::[0-5][0-9])?))\\b(?:(?!:))"
     
-    func extractDateStringAndFormat(string: String) -> [ExtractedTimeResult] {
+    public func extractDateStringAndFormat(string: String) -> [ExtractedTimeResult] {
         var timeStringFormats = Set<ExtractedTimeResult>()
 
         let matchedResults = extractStringWithRegex(string: string, regexPattern: regexPattern)

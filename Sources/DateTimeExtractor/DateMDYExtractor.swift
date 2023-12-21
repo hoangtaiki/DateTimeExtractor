@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct DateMDYExtractor: DateExtractable {
+public struct DateMDYExtractor: DateExtractable {
     
     private let regexes: [DateRegex] = [
         // mm-dd-yy, mm-dd-yyyy
@@ -26,7 +26,7 @@ struct DateMDYExtractor: DateExtractable {
         DateRegex(formatType: .MDY, pattern: "\\b(?:(?:(?:jan(?:uary)?|mar(?:ch)?|may|jul(?:y)?|aug(?:ust)?|oct(?:ober)?|dec(?:ember)?)( )31)\\1|(?:(?:jan(?:uary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:tember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)( )(?:29|30)\\2))(?:(?:1[6-9]|[2-9]\\d)?\\d{2})\\b|\\b(?:(?:feb(?:ruary)?)( )29\\3(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))\\b|\\b(?:(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch?)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:tember)?)|(?:oct(?:ober)?|nov(?:ember)?|dec(?:ember)?))( )(?:0?[1-9]|1\\d|2[0-8])\\4(?:(?:1[6-9]|[2-9]\\d)?\\d{2})\\b")
     ]
     
-    func extractDateStringAndFormat(string: String) -> [ExtractedDateResult] {
+    public func extractDateStringAndFormat(string: String) -> [ExtractedDateResult] {
         var results = [ExtractedDateResult]()
         
         for regex in regexes {

@@ -47,7 +47,7 @@ public struct TimeFormatComponents {
         self.ampm = ampm
     }
     
-    func getFormat() -> String {
+    public func getFormat() -> String {
         var format = "\(hourFormat):\(minuteFormat)"
         if !secondFormat.isEmpty {
             format = "\(format):\(secondFormat)"
@@ -60,7 +60,7 @@ public struct TimeFormatComponents {
         return format
     }
     
-    func getFormattedString() -> String {
+    public func getFormattedString() -> String {
         var formattedString = "\(hourValue):\(minuteValue)"
         if !secondValue.isEmpty {
             formattedString = "\(formattedString):\(secondValue)"
@@ -73,7 +73,7 @@ public struct TimeFormatComponents {
         return formattedString
     }
     
-    private func getAMAndPMSign() -> String {
+    public func getAMAndPMSign() -> String {
         if ampm == "a" {
             return "AM"
         } else {

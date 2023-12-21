@@ -16,7 +16,7 @@ public struct DateFormatComponents: Hashable {
     public private(set) var month: String = ""
     public private(set) var year: String = ""
 
-    init(dayValue: String, monthValue: String, yearValue: String, formatType: DateFormatType) {
+    public init(dayValue: String, monthValue: String, yearValue: String, formatType: DateFormatType) {
         self.dayValue = dayValue
         self.monthValue = monthValue
         self.yearValue = yearValue
@@ -31,7 +31,7 @@ public struct DateFormatComponents: Hashable {
         self.formatType = formatType
     }
 
-    func getFormat() -> String {
+    public func getFormat() -> String {
         switch formatType {
         case .DMY:
             return "\(day)/\(month)/\(year)"
@@ -42,7 +42,7 @@ public struct DateFormatComponents: Hashable {
         }
     }
     
-    func getFormattedString() -> String {
+    public func getFormattedString() -> String {
         switch formatType {
             case .DMY:
                 return "\(dayValue)/\(monthValue)/\(yearValue)"
