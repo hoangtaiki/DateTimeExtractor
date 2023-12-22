@@ -8,6 +8,6 @@
 import Foundation
 
 public struct MatchedResult {
-    let string: String
-    let range: NSRange
+    public let string: String
+    public let range: NSRange
 }

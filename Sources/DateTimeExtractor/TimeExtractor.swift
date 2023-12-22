@@ -32,19 +32,14 @@ public struct TimeExtractor {
                     if lastComponent.contains(" ") {
                         let components = lastComponent.components(separatedBy: " ")
                         formatComponents.setMinuteValue(components[0])
-                            
-                        if let value = components[1].containsOneInArray(values: ["a", "p"]) {
-                            formatComponents.setAMPM(value)
-                        }
+                        formatComponents.setAMPM(components[1])
                     } else {
                         let pattern = "([0-5]?\\d)"
                         if let dateString = extractStringWithRegex(string: lastComponent, regexPattern: pattern).first?.string {
                             formatComponents.setMinuteValue(dateString)
 
                             let suffix = lastComponent.replacingOccurrences(of: dateString, with: "")
-                            if let value = suffix.containsOneInArray(values: ["a", "p"]) {
-                                formatComponents.setAMPM(value)
-                            }
+                            formatComponents.setAMPM(suffix)
                         }
                     }
                 } else if dateComponents.count == 3 {
@@ -55,19 +50,14 @@ public struct TimeExtractor {
                     if lastComponent.contains(" ") {
                         let components = lastComponent.components(separatedBy: " ")
                         formatComponents.setSecondValue(components[0])
-
-                        if let value = components[1].containsOneInArray(values: ["a", "p"]) {
-                            formatComponents.setAMPM(value)
-                        }
+                        formatComponents.setAMPM(components[1])
                     } else {
                         let pattern = "([0-5]?\\d)"
                         if let dateString = extractStringWithRegex(string: lastComponent, regexPattern: pattern).first?.string {
                             formatComponents.setSecondValue(dateString)
                             
                             let suffix = lastComponent.replacingOccurrences(of: dateString, with: "")
-                            if let value = suffix.containsOneInArray(values: ["a", "p"]) {
-                                formatComponents.setAMPM(value)
-                            }
+                            formatComponents.setAMPM(suffix)
                         }
                     }
                 }
@@ -97,17 +87,5 @@ public struct TimeExtractor {
         }
         
         return matchedResults
-    }
-}
-
-private extension String {
-    
-    func containsOneInArray(values: [String]) -> String? {
-        for value in values {
-            if self.contains(value) {
-                return value
-            }
-        }
-        return nil
     }
 }

@@ -12,6 +12,12 @@ public struct ExtractedDateResult: Equatable {
     public let range: NSRange
     public let formatComponents: DateFormatComponents
     
+    public init(originalString: String, range: NSRange, formatComponents: DateFormatComponents) {
+        self.originalString = originalString
+        self.range = range
+        self.formatComponents = formatComponents
+    }
+    
     public static func == (lhs: ExtractedDateResult, rhs: ExtractedDateResult) -> Bool {
         return lhs.originalString == rhs.originalString
         && lhs.range == rhs.range

@@ -61,7 +61,9 @@ public struct TimeFormatComponents {
     }
     
     mutating func setAMPM(_ ampm: String) {
-        self.ampm = ampm
+        if let value = ampm.containsOneInArray(values: ["a", "p", "A", "P"]) {
+            self.ampm = value.lowercased()
+        }
     }
     
     public func getFormat() -> String {
@@ -96,5 +98,17 @@ public struct TimeFormatComponents {
         } else {
             return "PM"
         }
+    }
+}
+
+private extension String {
+    
+    func containsOneInArray(values: [String]) -> String? {
+        for value in values {
+            if self.contains(value) {
+                return value
+            }
+        }
+        return nil
     }
 }

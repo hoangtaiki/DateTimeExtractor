@@ -18,4 +18,16 @@ public struct ExtractedTimeResult: Equatable {
         && lhs.formatComponents.getFormat() == rhs.formatComponents.getFormat()
         && lhs.formatComponents.getFormattedString() == rhs.formatComponents.getFormattedString()
     }
+    
+    public init(originalString: String, range: NSRange, formatComponents: TimeFormatComponents) {
+        self.originalString = originalString
+        self.range = range
+        self.formatComponents = formatComponents
+    }
+    
+    init(original: String, range: NSRange, hour: String, minute: String, second: String = "", ampm: String = "") {
+        self.originalString = original
+        self.range = range
+        self.formatComponents = TimeFormatComponents(hourValue: hour, minuteValue: minute, secondValue: second, ampm: ampm)
+    }
 }
