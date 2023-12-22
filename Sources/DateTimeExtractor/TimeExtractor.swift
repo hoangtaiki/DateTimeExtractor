@@ -7,20 +7,6 @@
 
 import Foundation
 
-public struct ExtractedTimeResult: Hashable {
-    let originalString: String
-    let formatedString: String
-    let format: String
-    let range: NSRange
-    
-    public static func == (lhs: ExtractedTimeResult, rhs: ExtractedTimeResult) -> Bool {
-        return lhs.originalString == rhs.originalString
-        && lhs.formatedString == rhs.formatedString
-        && lhs.format == rhs.format
-        && rhs.range == lhs.range
-    }
-}
-
 public struct TimeExtractor {
     
     private let regexPattern: String = "(?:^|\\s|-)\\b((?:1[012]|0?[1-9]):([0-5][0-9])(?::[0-5][0-9])?((\\s?(am|pm))|(a|p))?|((1[3-9]|2[0-3]):[0-5][0-9](?::[0-5][0-9])?))\\b(?:(?!:))"
@@ -30,7 +16,7 @@ public struct TimeExtractor {
     }
     
     public func extractDateStringAndFormat(string: String) -> [ExtractedTimeResult] {
-        var timeStringFormats = Set<ExtractedTimeResult>()
+        var timeStringFormats = [ExtractedTimeResult]()
 
         let matchedResults = extractStringWithRegex(string: string, regexPattern: regexPattern)
         if !matchedResults.isEmpty {
@@ -87,14 +73,13 @@ public struct TimeExtractor {
                 }
                 
                 let format = ExtractedTimeResult(originalString: matchedResult.string,
-                                                 formatedString: formatComponents.getFormattedString(),
-                                                 format: formatComponents.getFormat(),
-                                                 range: matchedResult.range)
-                timeStringFormats.insert(format)
+                                                 range: matchedResult.range,
+                                                 formatComponents: formatComponents)
+                timeStringFormats.append(format)
             }
         }
         
-        return Array(timeStringFormats)
+        return timeStringFormats
     }
     
     func extractStringWithRegex(string: String, regexPattern: String) -> [MatchedResult] {

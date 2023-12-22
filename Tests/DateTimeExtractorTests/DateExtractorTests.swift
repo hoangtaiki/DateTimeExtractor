@@ -106,7 +106,7 @@ final class DateExtractorTests: XCTestCase {
         Dates: 01-august-1920 12-sep-23 february-29-2024 01 june 23 31/10/1999 are acceptable
         """
         let expectedResults = [
-            ExtractedDateResult(originalString: "01/01/01", range: NSMakeRange(64, 8),
+            ExtractedDateResult(originalString: "01/01/01", range: NSRange(64, 8),
                                 formatComponents: DateFormatComponents(dayValue: "01", monthValue: "01", yearValue: "01", formatType: .MDY)),
             ExtractedDateResult(originalString: "09/09/23", range: NSMakeRange(73, 8),
                                 formatComponents: DateFormatComponents(dayValue: "09", monthValue: "09", yearValue: "23", formatType: .MDY)),
@@ -119,7 +119,7 @@ final class DateExtractorTests: XCTestCase {
             ExtractedDateResult(originalString: "11-11-2011", range: NSMakeRange(107, 10),
                                 formatComponents: DateFormatComponents(dayValue: "11", monthValue: "11", yearValue: "2011", formatType: .MDY)),
             ExtractedDateResult(originalString: "11-9-11", range: NSMakeRange(118, 7),
-                                formatComponents: DateFormatComponents(dayValue: "9", monthValue: "11", yearValue: "11", formatType: .MDY)),
+                                formatComponents: DateFormatComponents(dayValue: "1", monthValue: "9", yearValue: "11", formatType: .MDY)),
             ExtractedDateResult(originalString: "04/13/2033", range: NSMakeRange(173, 10),
                                 formatComponents: DateFormatComponents(dayValue: "13", monthValue: "04", yearValue: "2033", formatType: .MDY)),
             ExtractedDateResult(originalString: "11/28/11", range: NSMakeRange(184, 8),

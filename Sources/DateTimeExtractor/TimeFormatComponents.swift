@@ -11,35 +11,52 @@ public struct TimeFormatComponents {
     public private(set) var hourValue: String = ""
     public private(set) var minuteValue: String = ""
     public private(set) var secondValue: String = ""
+    public private(set) var ampm: String = ""
     public private(set) var hourFormat: String = ""
     public private(set) var minuteFormat: String = ""
     public private(set) var secondFormat: String = ""
-    public private(set) var ampm: String = ""
+    
+    init(hourValue: String = "", minuteValue: String = "", secondValue: String = "", ampm: String = "") {
+        setHourValue(hourValue)
+        setMinuteValue(minuteValue)
+        setSecondValue(secondValue)
+        setAMPM(ampm)
+    }
     
     mutating func setHourValue(_ hourValue: String) {
         self.hourValue = hourValue
-        if hourValue.count == 1 {
+        switch hourValue.count {
+        case 1:
             hourFormat = "h"
-        } else {
+        case 2:
             hourFormat = "hh"
+        default:
+            hourFormat = ""
         }
     }
     
     mutating func setMinuteValue(_ minuteValue: String) {
         self.minuteValue = minuteValue
-        if minuteValue.count == 1 {
+        
+        switch minuteValue.count {
+        case 1:
             minuteFormat = "m"
-        } else {
+        case 2:
             minuteFormat = "mm"
+        default:
+            minuteFormat = ""
         }
     }
     
     mutating func setSecondValue(_ secondValue: String) {
         self.secondValue = secondValue
-        if secondValue.count == 1 {
+        switch secondValue.count {
+        case 1:
             secondFormat = "s"
-        } else {
+        case 2:
             secondFormat = "ss"
+        default:
+            secondFormat = ""
         }
     }
     

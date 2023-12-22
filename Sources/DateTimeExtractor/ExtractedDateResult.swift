@@ -8,9 +8,9 @@
 import Foundation
 
 public struct ExtractedDateResult: Equatable {
-    let originalString: String
-    let range: NSRange
-    let formatComponents: DateFormatComponents
+    public let originalString: String
+    public let range: NSRange
+    public let formatComponents: DateFormatComponents
     
     public static func == (lhs: ExtractedDateResult, rhs: ExtractedDateResult) -> Bool {
         return lhs.originalString == rhs.originalString
@@ -25,7 +25,11 @@ public extension Array where Iterator.Element == ExtractedDateResult {
     func groupResultsBySameRange() -> [[ExtractedDateResult]] {
         let sortedElements = sorted(by: { $0.range.location < $1.range.location } )
         
-        if sortedElements.count <= 1 {
+        if sortedElements.isEmpty {
+            return []
+        }
+        
+        if sortedElements.count == 1 {
             return [self]
         }
         
