@@ -24,6 +24,12 @@ public struct ExtractedDateResult: Equatable {
         && lhs.formatComponents.getFormat() == rhs.formatComponents.getFormat()
         && lhs.formatComponents.getFormattedString() == rhs.formatComponents.getFormattedString()
     }
+    
+    init(original: String, range: NSRange, day: String, month: String, year: String, formatType: DateFormatType) {
+        self.originalString = original
+        self.range = range
+        self.formatComponents = DateFormatComponents(dayValue: day, monthValue: month, yearValue: year, formatType: formatType)
+    }
 }
 
 public extension Array where Iterator.Element == ExtractedDateResult {
