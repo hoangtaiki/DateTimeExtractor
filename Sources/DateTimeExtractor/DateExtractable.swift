@@ -16,7 +16,8 @@ public protocol DateExtractable {
 public extension DateExtractable {
     
     func extractStringWithRegex(string: String, regexPattern: String) -> [MatchedResult] {
-        guard let regex = try? NSRegularExpression(pattern: regexPattern, options: []) else {
+        let options: NSRegularExpression.Options = [.caseInsensitive]
+        guard let regex = try? NSRegularExpression(pattern: regexPattern, options: options) else {
             return []
         }
         
