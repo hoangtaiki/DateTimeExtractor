@@ -31,25 +31,25 @@ public struct DateFormatComponents: Hashable {
         self.formatType = formatType
     }
 
-    public func getFormat() -> String {
+    public func getFormat(withSeparator separator: String = "/") -> String {
         switch formatType {
         case .DMY:
-            return "\(day)/\(month)/\(year)"
+            return "\(day)\(separator)\(month)\(separator)\(year)"
         case .MDY:
-            return "\(month)/\(day)/\(year)"
+            return "\(month)\(separator)\(day)\(separator)\(year)"
         case .YMD:
-            return "\(year)/\(month)/\(day)"
+            return "\(year)\(separator)\(month)\(separator)\(day)"
         }
     }
     
-    public func getFormattedString() -> String {
+    public func getFormattedString(withSeparator separator: String = "/") -> String {
         switch formatType {
             case .DMY:
-                return "\(dayValue)/\(monthValue)/\(yearValue)"
+                return "\(dayValue)\(separator)\(monthValue)\(separator)\(yearValue)"
             case .MDY:
-                return "\(monthValue)/\(dayValue)/\(yearValue)"
+                return "\(monthValue)\(separator)\(dayValue)\(separator)\(yearValue)"
             case .YMD:
-                return "\(yearValue)/\(monthValue)/\(dayValue)"
+                return "\(yearValue)\(separator)\(monthValue)\(separator)\(dayValue)"
         }
     }
 }
