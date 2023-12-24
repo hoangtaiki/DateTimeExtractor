@@ -27,9 +27,9 @@ public struct TimeFormatComponents {
         self.hourValue = hourValue
         switch hourValue.count {
         case 1:
-            hourFormat = "h"
+            hourFormat = "H"
         case 2:
-            hourFormat = "hh"
+            hourFormat = "HH"
         default:
             hourFormat = ""
         }
@@ -63,6 +63,7 @@ public struct TimeFormatComponents {
     mutating func setAMPM(_ ampm: String) {
         if let value = ampm.containsOneInArray(values: ["a", "p", "A", "P"]) {
             self.ampm = value.lowercased()
+            self.hourFormat = hourFormat.lowercased()
         }
     }
     
