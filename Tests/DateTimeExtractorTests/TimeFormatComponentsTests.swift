@@ -98,6 +98,4 @@ final class TimeFormatComponentsTests: XCTestCase {
         timeComponents.setAMPM("PM")
         XCTAssertEqual(timeComponents.getAMAndPMSign(), "PM")
     }
-    
-
 }

@@ -13,7 +13,7 @@ final class DateDMYExtractorTests: XCTestCase {
     private let extractor = DateDMYExtractor()
     private let data = TestsData()
 
-    func test_InvalidDate_ShouldNot_Recognize() {
+    func testInvalidDateShouldNotRecognize() {
         let dateStrings = [
             // Slash
             "32/12/23", "32/12/2023", "00/12/23", "0/12/2023", "01/01/1599", "28/2/10001",
@@ -42,7 +42,7 @@ final class DateDMYExtractorTests: XCTestCase {
         }
     }
     
-    func test_InvalidDate_DayMonthYear_ShouldNot_Recognize() {
+    func testInvalidDateDayMonthYearShouldNotRecognize() {
         let dateStrings = [
             // Slash
             "31/02/2023", "31/feb/2023", "31/february/2023", "31/02/23", "31/feb/23", "31/february/23",
@@ -96,9 +96,9 @@ final class DateDMYExtractorTests: XCTestCase {
         }
     }
     
-    func test_ValidDate_SlashFormat() {
+    func testValidDateSlashFormat() {
         let paragraph = data.paragraphSlashFormat
-        let expectedResults = data.expectedResults_SlashFormat
+        let expectedResults = data.expectedResultsSlashFormat
         
         let results = extractor.extractDateStringAndFormat(string: paragraph)
             .sorted(by: { $0.range.location < $1.range.location } )
@@ -110,9 +110,9 @@ final class DateDMYExtractorTests: XCTestCase {
         }
     }
     
-    func test_ValidDate_DotFormat() {
+    func testValidDateDotFormat() {
         let paragraph = data.paragraphSlashFormat.replacingOccurrences(of: "/", with: ".")
-        let expectedResults = data.expectedResults_SlashFormat
+        let expectedResults = data.expectedResultsSlashFormat
         
         let results = extractor.extractDateStringAndFormat(string: paragraph)
             .sorted(by: { $0.range.location < $1.range.location } )
@@ -127,9 +127,9 @@ final class DateDMYExtractorTests: XCTestCase {
         }
     }
     
-    func test_ValidDate_HyphenFormat() {
+    func testValidDateHyphenFormat() {
         let paragraph = data.paragraphSlashFormat.replacingOccurrences(of: "/", with: "-")
-        let expectedResults = data.expectedResults_SlashFormat
+        let expectedResults = data.expectedResultsSlashFormat
         
         let results = extractor.extractDateStringAndFormat(string: paragraph)
             .sorted(by: { $0.range.location < $1.range.location } )
@@ -144,9 +144,9 @@ final class DateDMYExtractorTests: XCTestCase {
         }
     }
     
-    func test_ValidDate_SpaceFormat() {
+    func testValidDateSpaceFormat() {
         let paragraph = data.paragraphSpaceFormat
-        let expectedResults = data.expectedResults_SpaceFormat
+        let expectedResults = data.expectedResultsSpaceFormat
         
         let results = extractor.extractDateStringAndFormat(string: paragraph)
             .sorted(by: { $0.range.location < $1.range.location } )
@@ -198,7 +198,7 @@ private struct TestsData {
     31/12/23/
     """
     
-    let expectedResults_SlashFormat = [
+    let expectedResultsSlashFormat = [
         ExtractedDateResult(original: "31/01/1600", range: NSRange(location: 113, length: 10), day: "31", month: "01", year: "1600", formatType: .DMY),
         ExtractedDateResult(original: "31/03/1999", range: NSRange(location: 124, length: 10), day: "31", month: "03", year: "1999", formatType: .DMY),
         ExtractedDateResult(original: "31/05/2000", range: NSRange(location: 135, length: 10), day: "31", month: "05", year: "2000", formatType: .DMY),
@@ -348,7 +348,7 @@ private struct TestsData {
     1 Oct 12 9 Dec 12 10 Jan 11 19 Sep 1992 10 Nov 11 22 Nov 34 26 Dec 6790 24 jan 2022
     """
     
-    let expectedResults_SpaceFormat = [
+    let expectedResultsSpaceFormat = [
         ExtractedDateResult(original: "31 Jan 91", range: NSRange(location: 57, length: 9), day: "31", month: "Jan", year: "91", formatType: .DMY),
         ExtractedDateResult(original: "31 January 01", range: NSRange(location: 67, length: 13), day: "31", month: "January", year: "01", formatType: .DMY),
         ExtractedDateResult(original: "31 Mar 2023", range: NSRange(location: 81, length: 11), day: "31", month: "Mar", year: "2023", formatType: .DMY),

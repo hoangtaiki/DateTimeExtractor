@@ -12,7 +12,7 @@ final class TimeExtractorTests: XCTestCase {
     
     private let extractor = TimeExtractor()
 
-    func test_InvalidDateString_12HourFormat() {
+    func testInvalidDateStringWith12HourFormat() {
         let dateStrings = [
             "12a", "59a", "12", "23",
             "24:59", "0:20a", "0:20p", "11:60a", "11:60p", " 11:59ap", " 11:59pa",
@@ -30,7 +30,7 @@ final class TimeExtractorTests: XCTestCase {
         }
     }
     
-    func test_InvalidDateString_24HourFormat() {
+    func testInvalidDateStringWith24HourFormat() {
         let dateStrings = [
             "12:1", "1:1:1", "1:1:01", "12:0:0", "1:01:1", "02:2:02", "23:03:04a", "13:20:45am",
             "12:12:0", "23:23:9", "20:9:20", "24:00:00", "23:60:60", "00:00:1", "23:30:12pm"
@@ -42,7 +42,7 @@ final class TimeExtractorTests: XCTestCase {
         }
     }
     
-    func test_ValidDate() {
+    func testValidDate() {
         let paragraph = """
         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
         These are correct date: 12:00:00 am 12:09:01a 12:59 am 12:59:59am 1:00a 01:00:00 am 01:59am

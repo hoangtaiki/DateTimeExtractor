@@ -25,7 +25,7 @@ public struct ExtractedTimeResult: Equatable {
         self.formatComponents = formatComponents
     }
     
-    init(original: String, range: NSRange, hour: String, minute: String, second: String = "", ampm: String = "") {
+    public init(original: String, range: NSRange, hour: String, minute: String, second: String = "", ampm: String = "") {
         self.originalString = original
         self.range = range
         self.formatComponents = TimeFormatComponents(hourValue: hour, minuteValue: minute, secondValue: second, ampm: ampm)

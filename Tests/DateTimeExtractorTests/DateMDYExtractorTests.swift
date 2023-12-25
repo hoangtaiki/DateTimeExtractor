@@ -13,7 +13,7 @@ final class DateMDYExtractorTests: XCTestCase {
     private let extractor = DateMDYExtractor()
     private let data = TestsData()
     
-    func test_InvalidDate_ShouldNot_Recognize() {
+    func testInvalidDateShouldNotRecognize() {
         let dateStrings = [
             // Slash
             "12/32/23", "12/32/2023", "12/00/23", "12/0/2023", "01/01/1599", "2/28/10001",
@@ -42,7 +42,7 @@ final class DateMDYExtractorTests: XCTestCase {
         }
     }
     
-    func test_InvalidDate_MonthNameString_ShouldNot_Recognize() {
+    func testInvalidDateMonthNameStringShouldNotRecognize() {
         let dateStrings = [
             // Slash
             "02/31/2023", "feb/31/2023", "february/31/2023", "02/31/23", "feb/31/23", "february/31/23",
@@ -96,9 +96,9 @@ final class DateMDYExtractorTests: XCTestCase {
         }
     }
     
-    func test_ValidDate_SlashFormat() {
+    func testValidDateSlashFormat() {
         let paragraph = data.paragraphSlashFormat
-        let expectedResults = data.expectedResults_SlashFormat
+        let expectedResults = data.expectedResultsSlashFormat
         
         let results = extractor.extractDateStringAndFormat(string: paragraph)
             .sorted(by: { $0.range.location < $1.range.location } )
@@ -110,9 +110,9 @@ final class DateMDYExtractorTests: XCTestCase {
         }
     }
     
-    func test_ValidDate_DotFormat() {
+    func testValidDateDotFormat() {
         let paragraph = data.paragraphSlashFormat.replacingOccurrences(of: "/", with: ".")
-        let expectedResults = data.expectedResults_SlashFormat
+        let expectedResults = data.expectedResultsSlashFormat
         
         let results = extractor.extractDateStringAndFormat(string: paragraph)
             .sorted(by: { $0.range.location < $1.range.location } )
@@ -127,9 +127,9 @@ final class DateMDYExtractorTests: XCTestCase {
         }
     }
 
-    func test_ValidDate_HyphenFormat() {
+    func testValidDateHyphenFormat() {
         let paragraph = data.paragraphSlashFormat.replacingOccurrences(of: "/", with: "-")
-        let expectedResults = data.expectedResults_SlashFormat
+        let expectedResults = data.expectedResultsSlashFormat
         
         let results = extractor.extractDateStringAndFormat(string: paragraph)
             .sorted(by: { $0.range.location < $1.range.location } )
@@ -144,9 +144,9 @@ final class DateMDYExtractorTests: XCTestCase {
         }
     }
     
-    func test_ValidDate_SpaceFormat() {
+    func testValidDateSpaceFormat() {
         let paragraph = data.paragraphSpaceFormat
-        let expectedResults = data.expectedResults_SpaceFormat
+        let expectedResults = data.expectedResultsSpaceFormat
         
         let results = extractor.extractDateStringAndFormat(string: paragraph)
             .sorted(by: { $0.range.location < $1.range.location } )
@@ -188,7 +188,7 @@ private struct TestsData {
     dec/31/23/
     """
     
-    let expectedResults_SlashFormat = [
+    let expectedResultsSlashFormat = [
         ExtractedDateResult(original: "01/31/1600", range: NSRange(location: 114, length: 10), day: "31", month: "01", year: "1600", formatType: .MDY),
         ExtractedDateResult(original: "03/31/1999", range: NSRange(location: 125, length: 10), day: "31", month: "03", year: "1999", formatType: .MDY),
         ExtractedDateResult(original: "05/31/2000", range: NSRange(location: 136, length: 10), day: "31", month: "05", year: "2000", formatType: .MDY),
@@ -339,7 +339,7 @@ private struct TestsData {
     October 21, 2023 JANUARY 01, 23 July 08, 1920
     """
     
-    let expectedResults_SpaceFormat = [
+    let expectedResultsSpaceFormat = [
         ExtractedDateResult(original: "jan 31 91", range: NSRange(location: 57, length: 9), day: "31", month: "jan", year: "91", formatType: .MDY),
         ExtractedDateResult(original: "january 31 01", range: NSRange(location: 67, length: 13), day: "31", month: "january", year: "01", formatType: .MDY),
         ExtractedDateResult(original: "mar 31 2023", range: NSRange(location: 81, length: 11), day: "31", month: "mar", year: "2023", formatType: .MDY),
