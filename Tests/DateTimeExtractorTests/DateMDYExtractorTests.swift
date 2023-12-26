@@ -323,7 +323,7 @@ private struct TestsData {
         ExtractedDateResult(original: "jan/31/31", range: NSRange(location: 1676, length: 9), day: "31", month: "jan", year: "31", formatType: .MDY),
         ExtractedDateResult(original: "jan/31/23", range: NSRange(location: 1688, length: 9), day: "31", month: "jan", year: "23", formatType: .MDY),
         ExtractedDateResult(original: "may/31/2023", range: NSRange(location: 1698, length: 11), day: "31", month: "may", year: "2023", formatType: .MDY),
-        ExtractedDateResult(original: "dec/31/23", range: NSRange(location: 1710, length: 9), day: "31", month: "dec", year: "23", formatType: .MDY)
+        ExtractedDateResult(original: "dec/31/23", range: NSRange(location: 1710, length: 9), day: "31", month: "dec", year: "23", formatType: .MDY),
     ]
     
     let paragraphSpaceFormat = """
@@ -336,7 +336,7 @@ private struct TestsData {
     may 29 2023 jun 29 2023 jul 29 2023 July 29 22 aug 29 2023 august 29 17 sep 29 25 september 29 44 oct 29 20
     october 29 21 nov 29 10 november 29 90 dec 29 23 december 29 23 feb 29 1648 february 29 2012 jan 01 24
     SEP 09 12 oct 1 12 DEC 9 12 jan 10 11 sep 19 1992 nov 10 11 nov 22 34 dec 26 6790 JAN 24 2022
-    October 21, 2023 JANUARY 01, 23 July 08, 1920
+    October 21, 2023 JANUARY 01, 23 July 08, 1920 Nov 12' 16 Jan 31' 2016 December 23' 23
     """
     
     let expectedResultsSpaceFormat = [
@@ -405,8 +405,11 @@ private struct TestsData {
         ExtractedDateResult(original: "nov 22 34", range: NSRange(location: 825, length: 9), day: "22", month: "nov", year: "34", formatType: .MDY),
         ExtractedDateResult(original: "dec 26 6790", range: NSRange(location: 835, length: 11), day: "26", month: "dec", year: "6790", formatType: .MDY),
         ExtractedDateResult(original: "JAN 24 2022", range: NSRange(location: 847, length: 11), day: "24", month: "JAN", year: "2022", formatType: .MDY),
-        ExtractedDateResult(original: "October 21, 2023", range: NSRange(location: 859, length: 16), day: "21,", month: "October", year: "2023", formatType: .MDY),
-        ExtractedDateResult(original: "JANUARY 01, 23", range: NSRange(location: 876, length: 14), day: "01,", month: "JANUARY", year: "23", formatType: .MDY),
-        ExtractedDateResult(original: "July 08, 1920", range: NSRange(location: 891, length: 13), day: "08,", month: "July", year: "1920", formatType: .MDY)
+        ExtractedDateResult(original: "October 21, 2023", range: NSRange(location: 859, length: 16), day: "21", month: "October", year: "2023", formatType: .MDY),
+        ExtractedDateResult(original: "JANUARY 01, 23", range: NSRange(location: 876, length: 14), day: "01", month: "JANUARY", year: "23", formatType: .MDY),
+        ExtractedDateResult(original: "July 08, 1920", range: NSRange(location: 891, length: 13), day: "08", month: "July", year: "1920", formatType: .MDY),
+        ExtractedDateResult(original: "Nov 12' 16", range: NSRange(location: 905, length: 10), day: "12", month: "Nov", year: "16", formatType: .MDY),
+        ExtractedDateResult(original: "Jan 31' 2016", range: NSRange(location: 916, length: 12), day: "31", month: "Jan", year: "2016", formatType: .MDY),
+        ExtractedDateResult(original: "December 23' 23", range: NSRange(location: 929, length: 15), day: "23", month: "December", year: "23", formatType: .MDY)
     ]
 }
