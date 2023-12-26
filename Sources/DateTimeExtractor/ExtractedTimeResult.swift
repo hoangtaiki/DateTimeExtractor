@@ -31,3 +31,20 @@ public struct ExtractedTimeResult: Equatable {
         self.formatComponents = TimeFormatComponents(hourValue: hour, minuteValue: minute, secondValue: second, ampm: ampm)
     }
 }
+
+public extension ExtractedTimeResult {
+    
+    func setTimeForDate(date: Date = Date(), timezone: TimeZone) -> Date? {
+        let dateFormat = "dd-MM-yyyy"
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeZone = timezone
+        dateFormatter.dateFormat = dateFormat
+        let formattedDate = dateFormatter.string(from: date)
+
+        let dateTimeString = "\(formattedDate) \(formatComponents.getFormattedString())"
+        let dateTimeFormat = "\(dateFormat) \(formatComponents.getFormat())"
+        dateFormatter.dateFormat = dateTimeFormat
+        let date = dateFormatter.date(from: dateTimeString)
+        return date
+    }
+}

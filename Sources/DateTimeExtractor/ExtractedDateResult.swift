@@ -32,6 +32,27 @@ public struct ExtractedDateResult: Equatable {
     }
 }
 
+public extension ExtractedDateResult {
+    
+    func getDate(timezone: TimeZone) -> Date? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeZone = timezone
+        dateFormatter.dateFormat = formatComponents.getFormat()
+        let date = dateFormatter.date(from: formatComponents.getFormattedString())
+        return date
+    }
+    
+    func getDate(withTimeResult timeResult: ExtractedTimeResult, timezone: TimeZone) -> Date? {
+        let dateTimeString = "\(formatComponents.getFormattedString()) \(timeResult.formatComponents.getFormattedString())"
+        let dateTimeFormat = "\(formatComponents.getFormat()) \(timeResult.formatComponents.getFormat())"
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeZone = timezone
+        dateFormatter.dateFormat = dateTimeFormat
+        let date = dateFormatter.date(from: dateTimeString)
+        return date
+    }
+}
+
 public extension Array where Iterator.Element == ExtractedDateResult {
     
     func groupResultsBySameRange() -> [[ExtractedDateResult]] {

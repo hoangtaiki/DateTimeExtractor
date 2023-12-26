@@ -62,4 +62,27 @@ final class ExtractedDateResultTests: XCTestCase {
         XCTAssertEqual(sameRangeResults[1], [result2, result5])
         XCTAssertEqual(sameRangeResults[2], [result6])
     }
+    
+    func testGetDate() {
+        let laTimezone = TimeZone(identifier: "America/Los_Angeles")!
+        let expectedDate = Date(month: 11, day: 5, year: 2023, timezone: laTimezone)
+        let extractedDateResult = ExtractedDateResult(originalString: "05/11/23", range: NSRange(location: 0, length: 8),
+                                                      formatComponents: DateFormatComponents(dayValue: "05", monthValue: "11", yearValue: "23",
+                                                                                             formatType: .DMY))
+        let result = extractedDateResult.getDate(timezone: laTimezone)
+        XCTAssertEqual(result, expectedDate)
+    }
+    
+    func testGetDateWithTimeResult() {
+        let laTimezone = TimeZone(identifier: "America/Los_Angeles")!
+        let extractedDateResult = ExtractedDateResult(originalString: "05/11/23", range: NSRange(location: 0, length: 8),
+                                                      formatComponents: DateFormatComponents(dayValue: "05", monthValue: "11", yearValue: "23",
+                                                                                             formatType: .DMY))
+        let extractedTimeResult = ExtractedTimeResult(originalString: "11:30:30 pm", range: NSRange(location: 0, length: 11),
+                                                      formatComponents: TimeFormatComponents(hourValue: "11", minuteValue: "30", secondValue: "30", ampm: "pm"))
+        let expectedDate = Date(month: 11, day: 5, year: 2023, hour: 23, minute: 30, second: 30, timezone: laTimezone)
+
+        let result = extractedDateResult.getDate(withTimeResult: extractedTimeResult, timezone: laTimezone)
+        XCTAssertEqual(result, expectedDate)
+    }
 }

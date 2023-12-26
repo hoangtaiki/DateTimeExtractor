@@ -86,6 +86,7 @@ private extension DateTimeExtractorTests {
 }
 
 private extension DateTimeExtractorTests {
+    
     func createSUT(prioritizedFormatType: DateFormatType,
                    supportedDateTimeTypes: [SupportedDateTimeType] = [.bothDateAndTime, .onlyDate],
                    timezone: TimeZone) -> DateTimeExtractor {

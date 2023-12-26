@@ -39,7 +39,9 @@ public struct DateTimeExtractor {
         }
         
         let groupingResult = groupDateAndTimeResults(dateResults: dateResults, timeResults: timeResults)
-        var dates = groupingResult.adjacentResults.map { $0.getDate(timezone: timezone) }.compactMap { $0 }
+        var dates = groupingResult.adjacentResults
+            .map { $0.dateResult.getDate(withTimeResult: $0.timeResult, timezone: timezone) }
+            .compactMap { $0 }
         
         if supportedDateTimeTypes.contains(.onlyDate) {
             let onlyDates = groupingResult.remainingDates.map { $0.getDate(timezone: timezone) }.compactMap { $0 }
@@ -55,16 +57,6 @@ private extension DateTimeExtractor {
     struct ParsedDateTime {
         let dateResult: ExtractedDateResult
         let timeResult: ExtractedTimeResult
-        
-        func getDate(timezone: TimeZone) -> Date? {
-            let dateTimeString = "\(dateResult.formatComponents.getFormattedString()) \(timeResult.formatComponents.getFormattedString())"
-            let dateTimeFormat = "\(dateResult.formatComponents.getFormat()) \(timeResult.formatComponents.getFormat())"
-            let dateFormater = DateFormatter()
-            dateFormater.timeZone = timezone
-            dateFormater.dateFormat = dateTimeFormat
-            let date = dateFormater.date(from: dateTimeString)
-            return date
-        }
     }
     
     struct DateAndTimeGroupingResult {
@@ -148,16 +140,5 @@ private extension DateTimeExtractor {
         let case1 = range2.location == range1.location + range1.length + 1
         let case2 = range1.location == range2.location + range2.length + 1
         return case1 || case2
-    }
-}
-
-extension ExtractedDateResult {
-    
-    func getDate(timezone: TimeZone) -> Date? {
-        let dateFormater = DateFormatter()
-        dateFormater.timeZone = timezone
-        dateFormater.dateFormat = formatComponents.getFormat()
-        let date = dateFormater.date(from: formatComponents.getFormattedString())
-        return date
     }
 }
