@@ -25,6 +25,8 @@ public struct DateExtractor: DateExtractable {
         extractors.append(dmyExtractor)
         let mdyExtractor = DateMDYExtractor()
         extractors.append(mdyExtractor)
+        let ymdExtractor = DateYMDExtractor()
+        extractors.append(ymdExtractor)
     }
 
     public mutating func registerExtractor(_ extractor: DateExtractable) {

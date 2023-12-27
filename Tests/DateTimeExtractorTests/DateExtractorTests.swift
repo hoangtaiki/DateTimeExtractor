@@ -21,9 +21,10 @@ final class DateExtractorTests: XCTestCase {
         var dateExtractor = DateExtractor()
         dateExtractor.registerDefaultExtractors()
         
-        XCTAssertEqual(dateExtractor.extractors.count, 2)
+        XCTAssertEqual(dateExtractor.extractors.count, 3)
         XCTAssertTrue(dateExtractor.extractors.contains { $0 is DateDMYExtractor })
         XCTAssertTrue(dateExtractor.extractors.contains { $0 is DateMDYExtractor })
+        XCTAssertTrue(dateExtractor.extractors.contains { $0 is DateYMDExtractor })
     }
     
     func testRegisterExtractor() {
@@ -52,6 +53,7 @@ final class DateExtractorTests: XCTestCase {
         Dates: 01/01/01 09/09/23 1.9.19 10-10-24 12.12.12 11-11-2011 11-9-11 is valid for both dd/mm/yy and mm/dd/yy
         Dates: 04/13/2033 11/28/11 21/12/23 still can be recognized as mm/dd/yy because second component > 12
         Dates: 01-august-1920 12-sep-23 february-29-2024 01 june 23 31/10/1999 01-AUGUST-18 24 JAN 2022 are acceptable
+        Dates: 2023-12-27 2023-12-09 2023-07-10 are acceptable but 2023-27-12 2023-12-9 2023-7-10 are not acceptable
         """
         let expectedResults = [
             ExtractedDateResult(original: "01/01/01", range: NSRange(location: 64, length: 8), day: "01", month: "01", year: "01", formatType: .DMY),
@@ -71,7 +73,10 @@ final class DateExtractorTests: XCTestCase {
             ExtractedDateResult(original: "june 23 31", range: NSRange(location: 320, length: 10), day: "23", month: "june", year: "31", formatType: .MDY),
             ExtractedDateResult(original: "31/10/1999", range: NSRange(location: 328, length: 10), day: "31", month: "10", year: "1999", formatType: .DMY),
             ExtractedDateResult(original: "01-AUGUST-18", range: NSRange(location: 339, length: 12), day: "01", month: "AUGUST", year: "18", formatType: .DMY),
-            ExtractedDateResult(original: "24 JAN 2022", range: NSRange(location: 352, length: 11), day: "24", month: "JAN", year: "2022", formatType: .DMY)
+            ExtractedDateResult(original: "24 JAN 2022", range: NSRange(location: 352, length: 11), day: "24", month: "JAN", year: "2022", formatType: .DMY),
+            ExtractedDateResult(original: "2023-12-27", range: NSRange(location: 386, length: 10), day: "27", month: "12", year: "2023", formatType: .YMD),
+            ExtractedDateResult(original: "2023-12-09", range: NSRange(location: 397, length: 10), day: "09", month: "12", year: "2023", formatType: .YMD),
+            ExtractedDateResult(original: "2023-07-10", range: NSRange(location: 408, length: 10), day: "10", month: "07", year: "2023", formatType: .YMD)
         ]
         var extractor = DateExtractor(prioritizedFormatType: .DMY)
         extractor.registerDefaultExtractors()
@@ -90,6 +95,7 @@ final class DateExtractorTests: XCTestCase {
         Dates: 01/01/01 09/09/23 1.9.19 10-10-24 12.12.12 11-11-2011 11-9-11 is valid for both dd/mm/yy and mm/dd/yy
         Dates: 04/13/2033 11/28/11 21/12/23 still can be recognized as mm/dd/yy because second component > 12
         Dates: august-01-1920 sep-12-23 February-29-2024 june 01 23 10/31/1999 AUGUST-01-18 JAN 24 2022 are acceptable
+        Dates: 2023-12-27 2023-12-09 2023-07-10 are acceptable but 2023-27-12 2023-12-9 2023-7-10 are not acceptable
         """
         let expectedResults = [
             ExtractedDateResult(original: "01/01/01", range: NSRange(location: 64, length: 8), day: "01", month: "01", year: "01", formatType: .MDY),
@@ -109,7 +115,10 @@ final class DateExtractorTests: XCTestCase {
             ExtractedDateResult(original: "10/31/1999", range: NSRange(location: 328, length: 10), day: "31", month: "10", year: "1999", formatType: .MDY),
             ExtractedDateResult(original: "AUGUST-01-18", range: NSRange(location: 339, length: 12), day: "01", month: "AUGUST", year: "18", formatType: .MDY),
             ExtractedDateResult(original: "18 JAN 24", range: NSRange(location: 349, length: 9),  day: "18", month: "JAN", year: "24", formatType: .DMY),
-            ExtractedDateResult(original: "JAN 24 2022", range: NSRange(location: 352, length: 11), day: "24", month: "JAN", year: "2022", formatType: .MDY)
+            ExtractedDateResult(original: "JAN 24 2022", range: NSRange(location: 352, length: 11), day: "24", month: "JAN", year: "2022", formatType: .MDY),
+            ExtractedDateResult(original: "2023-12-27", range: NSRange(location: 386, length: 10), day: "27", month: "12", year: "2023", formatType: .YMD),
+            ExtractedDateResult(original: "2023-12-09", range: NSRange(location: 397, length: 10), day: "09", month: "12", year: "2023", formatType: .YMD),
+            ExtractedDateResult(original: "2023-07-10", range: NSRange(location: 408, length: 10), day: "10", month: "07", year: "2023", formatType: .YMD)
         ]
         var extractor = DateExtractor(prioritizedFormatType: .MDY)
         extractor.registerDefaultExtractors()
