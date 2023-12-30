@@ -21,11 +21,19 @@ public struct DateFormatComponents: Hashable {
         self.monthValue = monthValue
         self.yearValue = yearValue
         self.day = dayValue.count == 2 ? "dd" : "d"
-        self.month = switch monthValue.count {
-            case 1: "M"
-            case 2: "MM"
-            case 3: "MMM"
-            default: "MMMM"
+        switch monthValue.count {
+            case 1:
+                self.month = "M"
+                break
+            case 2:
+                self.month = "MM"
+                break
+            case 3:
+                self.month = "MMM"
+                break
+            default:
+                self.month = "MMMM"
+                break
         }
         self.year = yearValue.count == 2 ? "yy" : "yyyy"
         self.formatType = formatType
