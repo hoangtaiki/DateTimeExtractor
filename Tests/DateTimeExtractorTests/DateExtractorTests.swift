@@ -5,37 +5,37 @@
 //  Created by Harry Tran on 21/12/2023.
 //
 
-import XCTest
 @testable import DateTimeExtractor
+import XCTest
+
+// swiftlint:disable line_length
 
 struct MockDateExtracter: DateExtractable {
-    
-    func extractDateStringAndFormat(string: String) -> [ExtractedDateResult] {
+    func extractDateStringAndFormat(string _: String) -> [ExtractedDateResult] {
         return []
     }
 }
 
 final class DateExtractorTests: XCTestCase {
-    
     func testRegisterDefaultExtractors() {
         var dateExtractor = DateExtractor()
         dateExtractor.registerDefaultExtractors()
-        
+
         XCTAssertEqual(dateExtractor.extractors.count, 3)
         XCTAssertTrue(dateExtractor.extractors.contains { $0 is DateDMYExtractor })
         XCTAssertTrue(dateExtractor.extractors.contains { $0 is DateMDYExtractor })
         XCTAssertTrue(dateExtractor.extractors.contains { $0 is DateYMDExtractor })
     }
-    
+
     func testRegisterExtractor() {
         var dateExtractor = DateExtractor()
         let customExtractor = MockDateExtracter()
         dateExtractor.registerExtractor(customExtractor)
-        
+
         XCTAssertEqual(dateExtractor.extractors.count, 1)
         XCTAssertTrue(dateExtractor.extractors.contains { $0 is MockDateExtracter })
     }
-    
+
     func testChangePrioritizedFormatType() {
         var dateExtractor = DateExtractor()
         XCTAssertEqual(dateExtractor.prioritizedFormatType, .MDY)
@@ -46,7 +46,7 @@ final class DateExtractorTests: XCTestCase {
         dateExtractor.setPrioritizedFormatType(.MDY)
         XCTAssertEqual(dateExtractor.prioritizedFormatType, .MDY)
     }
-    
+
     func testDateExtractorWithPrioritizedFormatTypeIsDMY() {
         let paragraph = """
         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -81,14 +81,14 @@ final class DateExtractorTests: XCTestCase {
         var extractor = DateExtractor(prioritizedFormatType: .DMY)
         extractor.registerDefaultExtractors()
         let results = extractor.extractDateStringAndFormat(string: paragraph)
-            .sorted(by: { $0.range.location < $1.range.location } )
-        
+            .sorted(by: { $0.range.location < $1.range.location })
+
         for (index, result) in results.enumerated() {
             let message = "Fail with index \(index)"
             XCTAssertEqual(result, expectedResults[index], message)
         }
     }
-    
+
     func testDateExtractorWithPrioritizedFormatTypeIsMDY() {
         let paragraph = """
         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -114,7 +114,7 @@ final class DateExtractorTests: XCTestCase {
             ExtractedDateResult(original: "june 01 23", range: NSRange(location: 317, length: 10), day: "01", month: "june", year: "23", formatType: .MDY),
             ExtractedDateResult(original: "10/31/1999", range: NSRange(location: 328, length: 10), day: "31", month: "10", year: "1999", formatType: .MDY),
             ExtractedDateResult(original: "AUGUST-01-18", range: NSRange(location: 339, length: 12), day: "01", month: "AUGUST", year: "18", formatType: .MDY),
-            ExtractedDateResult(original: "18 JAN 24", range: NSRange(location: 349, length: 9),  day: "18", month: "JAN", year: "24", formatType: .DMY),
+            ExtractedDateResult(original: "18 JAN 24", range: NSRange(location: 349, length: 9), day: "18", month: "JAN", year: "24", formatType: .DMY),
             ExtractedDateResult(original: "JAN 24 2022", range: NSRange(location: 352, length: 11), day: "24", month: "JAN", year: "2022", formatType: .MDY),
             ExtractedDateResult(original: "2023-12-27", range: NSRange(location: 386, length: 10), day: "27", month: "12", year: "2023", formatType: .YMD),
             ExtractedDateResult(original: "2023-12-09", range: NSRange(location: 397, length: 10), day: "09", month: "12", year: "2023", formatType: .YMD),
@@ -123,13 +123,11 @@ final class DateExtractorTests: XCTestCase {
         var extractor = DateExtractor(prioritizedFormatType: .MDY)
         extractor.registerDefaultExtractors()
         let results = extractor.extractDateStringAndFormat(string: paragraph)
-            .sorted(by: { $0.range.location < $1.range.location } )
-        
+            .sorted(by: { $0.range.location < $1.range.location })
+
         for (index, result) in results.enumerated() {
             let message = "Fail with index \(index)"
             XCTAssertEqual(result, expectedResults[index], message)
         }
     }
 }
-
-

@@ -1,6 +1,6 @@
 //
-//  File.swift
-//  
+//  DateFormatComponents.swift
+//
 //
 //  Created by Harry Tran on 19/12/2023.
 //
@@ -20,22 +20,18 @@ public struct DateFormatComponents: Hashable {
         self.dayValue = dayValue
         self.monthValue = monthValue
         self.yearValue = yearValue
-        self.day = dayValue.count == 2 ? "dd" : "d"
+        day = dayValue.count == 2 ? "dd" : "d"
         switch monthValue.count {
-            case 1:
-                self.month = "M"
-                break
-            case 2:
-                self.month = "MM"
-                break
-            case 3:
-                self.month = "MMM"
-                break
-            default:
-                self.month = "MMMM"
-                break
+        case 1:
+            month = "M"
+        case 2:
+            month = "MM"
+        case 3:
+            month = "MMM"
+        default:
+            month = "MMMM"
         }
-        self.year = yearValue.count == 2 ? "yy" : "yyyy"
+        year = yearValue.count == 2 ? "yy" : "yyyy"
         self.formatType = formatType
     }
 
@@ -49,15 +45,15 @@ public struct DateFormatComponents: Hashable {
             return "\(year)\(separator)\(month)\(separator)\(day)"
         }
     }
-    
+
     public func getFormattedString(withSeparator separator: String = "/") -> String {
         switch formatType {
-            case .DMY:
-                return "\(dayValue)\(separator)\(monthValue)\(separator)\(yearValue)"
-            case .MDY:
-                return "\(monthValue)\(separator)\(dayValue)\(separator)\(yearValue)"
-            case .YMD:
-                return "\(yearValue)\(separator)\(monthValue)\(separator)\(dayValue)"
+        case .DMY:
+            return "\(dayValue)\(separator)\(monthValue)\(separator)\(yearValue)"
+        case .MDY:
+            return "\(monthValue)\(separator)\(dayValue)\(separator)\(yearValue)"
+        case .YMD:
+            return "\(yearValue)\(separator)\(monthValue)\(separator)\(dayValue)"
         }
     }
 }

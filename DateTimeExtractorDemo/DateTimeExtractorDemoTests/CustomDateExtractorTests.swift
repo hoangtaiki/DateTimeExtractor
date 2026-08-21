@@ -5,15 +5,16 @@
 //  Created by Harry Tran on 25/12/2023.
 //
 
-import Foundation
-import XCTest
 import DateTimeExtractor
 @testable import DateTimeExtractorDemo
+import Foundation
+import XCTest
+
+// swiftlint:disable line_length
 
 final class CustomDateExtractorTests: XCTestCase {
-    
     private let extractor = CustomDateExtractor()
-    
+
     func testValidDate() {
         let paragraph = """
         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -29,10 +30,10 @@ final class CustomDateExtractorTests: XCTestCase {
             ExtractedDateResult(original: "October21' 2023", range: NSRange(location: 134, length: 15), day: "21", month: "October", year: "2023", formatType: .DMY),
             ExtractedDateResult(original: "JANUARY01' 23", range: NSRange(location: 150, length: 13), day: "01", month: "JANUARY", year: "23", formatType: .DMY)
         ]
-        
+
         let results = extractor.extractDateStringAndFormat(string: paragraph)
-            .sorted(by: { $0.range.location < $1.range.location } )
-        
+            .sorted(by: { $0.range.location < $1.range.location })
+
         for (index, result) in results.enumerated() {
             let message = "Fail with index \(index)"
             XCTAssertEqual(result, expectedResults[index], message)

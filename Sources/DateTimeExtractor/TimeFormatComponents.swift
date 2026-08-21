@@ -15,14 +15,14 @@ public struct TimeFormatComponents {
     public private(set) var hourFormat: String = ""
     public private(set) var minuteFormat: String = ""
     public private(set) var secondFormat: String = ""
-    
+
     init(hourValue: String = "", minuteValue: String = "", secondValue: String = "", ampm: String = "") {
         setHourValue(hourValue)
         setMinuteValue(minuteValue)
         setSecondValue(secondValue)
         setAMPM(ampm)
     }
-    
+
     mutating func setHourValue(_ hourValue: String) {
         self.hourValue = hourValue
         switch hourValue.count {
@@ -34,10 +34,10 @@ public struct TimeFormatComponents {
             hourFormat = ""
         }
     }
-    
+
     mutating func setMinuteValue(_ minuteValue: String) {
         self.minuteValue = minuteValue
-        
+
         switch minuteValue.count {
         case 1:
             minuteFormat = "m"
@@ -47,7 +47,7 @@ public struct TimeFormatComponents {
             minuteFormat = ""
         }
     }
-    
+
     mutating func setSecondValue(_ secondValue: String) {
         self.secondValue = secondValue
         switch secondValue.count {
@@ -59,40 +59,40 @@ public struct TimeFormatComponents {
             secondFormat = ""
         }
     }
-    
+
     mutating func setAMPM(_ ampm: String) {
         if let value = ampm.containsOneInArray(values: ["a", "p", "A", "P"]) {
             self.ampm = value.lowercased()
-            self.hourFormat = hourFormat.lowercased()
+            hourFormat = hourFormat.lowercased()
         }
     }
-    
+
     public func getFormat() -> String {
         var format = "\(hourFormat):\(minuteFormat)"
         if !secondFormat.isEmpty {
             format = "\(format):\(secondFormat)"
         }
-        
+
         if !ampm.isEmpty {
             format = "\(format) a"
         }
-        
+
         return format
     }
-    
+
     public func getFormattedString() -> String {
         var formattedString = "\(hourValue):\(minuteValue)"
         if !secondValue.isEmpty {
             formattedString = "\(formattedString):\(secondValue)"
         }
-        
+
         if !ampm.isEmpty {
             formattedString = "\(formattedString) \(getAMAndPMSign())"
         }
-        
+
         return formattedString
     }
-    
+
     public func getAMAndPMSign() -> String {
         if ampm == "a" {
             return "AM"
@@ -103,12 +103,9 @@ public struct TimeFormatComponents {
 }
 
 private extension String {
-    
     func containsOneInArray(values: [String]) -> String? {
-        for value in values {
-            if self.contains(value) {
-                return value
-            }
+        for value in values where contains(value) {
+            return value
         }
         return nil
     }

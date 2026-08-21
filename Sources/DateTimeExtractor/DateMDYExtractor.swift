@@ -1,6 +1,6 @@
 //
 //  DateMDYExtractor.swift
-//  
+//
 //
 //  Created by Harry Tran on 20/12/2023.
 //
@@ -8,7 +8,6 @@
 import Foundation
 
 public struct DateMDYExtractor: DateExtractable {
-    
     private let regexes: [DateRegex] = [
         // mm-dd-yy, mm-dd-yyyy
         // mmm-dd-yy, mmm-dd-yyyy
@@ -19,19 +18,21 @@ public struct DateMDYExtractor: DateExtractable {
         // mm.dd.yy, mm.dd.yyyy
         // mmm.dd.yy, mmm.dd.yyyy
         // mmmm.dd.yy and mmmm.dd.yyyy
+        // swiftlint:disable:next line_length - single regex literal, cannot be wrapped
         DateRegex(formatType: .MDY, pattern: "\\b(?:(?:(?:0?[13578]|1[02]|(?:jan(?:uary)?|mar(?:ch)?|may|jul(?:y)?|aug(?:ust)?|oct(?:ober)?|dec(?:ember)?)))(\\/|-|\\.)31\\1|(?:(?:0?[1,3-9]|1[0-2]|(?:jan(?:uary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:tember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)))(\\/|-|\\.)(?:29|30)\\2)(?:(?:1[6-9]|[2-9]\\d)?\\d{2})\\b|\\b(?:(?:0?2|(?:feb(?:ruary)?))(\\/|-|\\.)29\\3(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))\\b|\\b(?:(?:0?[1-9]|(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch?)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:tember)?))|(?:1[0-2]|(?:oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)))(\\/|-|\\.)(?:0?[1-9]|1\\d|2[0-8])\\4(?:(?:1[6-9]|[2-9]\\d)?\\d{2})\\b"),
-        
+
         // `MMM dd yy`, `MMM dd yyy`, `MMM dd, yy`, `MMM dd, yyy`, `MMM dd' yy`, `MMM dd' yyy`
         // `MMMM dd yy`, `MMMM dd yyy`, `MMMM dd, yy`, `MMMM dd, yyy`, `MMMM dd' yy`, `MMMM dd' yyy`
+        // swiftlint:disable:next line_length - single regex literal, cannot be wrapped
         DateRegex(formatType: .MDY, pattern: "\\b(?:(?:(?:jan(?:uary)?|mar(?:ch)?|may|jul(?:y)?|aug(?:ust)?|oct(?:ober)?|dec(?:ember)?)( )31[,']?)\\1|(?:(?:jan(?:uary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:tember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)( )(?:29|30)[,']?\\2))(?:(?:1[6-9]|[2-9]\\d)?\\d{2})\\b|\\b(?:(?:feb(?:ruary)?)( )29[,']?\\3(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))\\b|\\b(?:(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch?)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:tember)?)|(?:oct(?:ober)?|nov(?:ember)?|dec(?:ember)?))( )(?:0?[1-9]|1\\d|2[0-8])[,']?\\4(?:(?:1[6-9]|[2-9]\\d)?\\d{2})\\b")
     ]
-    
+
     public func extractDateStringAndFormat(string: String) -> [ExtractedDateResult] {
         var results = [ExtractedDateResult]()
-        
+
         for regex in regexes {
             let matchedResults = extractStringWithRegex(string: string, regexPattern: regex.pattern)
-            
+
             if !matchedResults.isEmpty {
                 for matchedResult in matchedResults {
                     let extractedString = matchedResult.string.trimmingCharacters(in: .whitespaces)
@@ -50,7 +51,7 @@ public struct DateMDYExtractor: DateExtractable {
                 }
             }
         }
-        
+
         return results
     }
 }

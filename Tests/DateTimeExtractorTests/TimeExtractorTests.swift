@@ -1,15 +1,16 @@
 //
 //  TimeExtractorTests.swift
-//  
+//
 //
 //  Created by Harry Tran on 20/12/2023.
 //
 
-import XCTest
 @testable import DateTimeExtractor
+import XCTest
+
+// swiftlint:disable line_length
 
 final class TimeExtractorTests: XCTestCase {
-    
     private let extractor = TimeExtractor()
 
     func testInvalidDateStringWith12HourFormat() {
@@ -22,14 +23,14 @@ final class TimeExtractorTests: XCTestCase {
             "00:53:00a", "00:53:00p", "00:53:59am", "00:53:01pm",
             "1:01:1a", "12:12:0p", "23:23:9 am", "20:9:20 pm"
         ]
-        
+
         for (index, dateString) in dateStrings.enumerated() {
             let results = extractor.extractDateStringAndFormat(string: dateString)
             let message = "Fail with \(dateString). Index \(index) \(results)"
             XCTAssertTrue(results.isEmpty, message)
         }
     }
-    
+
     func testInvalidDateStringWith24HourFormat() {
         let dateStrings = [
             "12:1", "1:1:1", "1:1:01", "12:0:0", "1:01:1", "02:2:02", "23:03:04a", "13:20:45am",
@@ -41,7 +42,8 @@ final class TimeExtractorTests: XCTestCase {
             XCTAssertTrue(results.isEmpty, message)
         }
     }
-    
+
+    // swiftlint:disable:next function_body_length
     func testValidDate() {
         let paragraph = """
         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -52,7 +54,7 @@ final class TimeExtractorTests: XCTestCase {
         These are incorrect date: 00:50:00a 24:23:12 12:12:0p 13:10:10am 14:15:59pm
         These are correct date with hyphen character between them: 3:45pm-5:15pm 02:12:45-13:43:56
         """
-        
+
         let expectedResults = [
             ExtractedTimeResult(original: "12:00:00 am", range: NSRange(location: 81, length: 11), hour: "12", minute: "00", second: "00", ampm: "a"),
             ExtractedTimeResult(original: "12:09:01a", range: NSRange(location: 93, length: 9), hour: "12", minute: "09", second: "01", ampm: "a"),
@@ -95,9 +97,9 @@ final class TimeExtractorTests: XCTestCase {
             ExtractedTimeResult(original: "02:12:45", range: NSRange(location: 545, length: 8), hour: "02", minute: "12", second: "45"),
             ExtractedTimeResult(original: "13:43:56", range: NSRange(location: 554, length: 8), hour: "13", minute: "43", second: "56")
         ]
-        
+
         let results = extractor.extractDateStringAndFormat(string: paragraph)
-            .sorted(by: { $0.range.location < $1.range.location } )
+            .sorted(by: { $0.range.location < $1.range.location })
 
         XCTAssertEqual(results.count, expectedResults.count)
         for (index, result) in results.enumerated() {

@@ -14,13 +14,12 @@ public protocol DateExtractable {
 }
 
 public extension DateExtractable {
-    
     func extractStringWithRegex(string: String, regexPattern: String) -> [MatchedResult] {
         let options: NSRegularExpression.Options = [.caseInsensitive]
         guard let regex = try? NSRegularExpression(pattern: regexPattern, options: options) else {
             return []
         }
-        
+
         let range = NSRange(location: 0, length: string.utf16.count)
         let matches = regex.matches(in: string, range: range)
         var matchedResults = [MatchedResult]()
@@ -28,18 +27,16 @@ public extension DateExtractable {
             let matchedString = (string as NSString).substring(with: match.range)
             matchedResults.append(MatchedResult(string: matchedString, range: match.range))
         }
-        
+
         return matchedResults
     }
-    
+
     func detectDateSeparator(string: String) -> String? {
         let separators: [String] = ["/", "-", "."]
-        for separator in separators {
-            if string.contains(separator) {
-                return separator
-            }
+        for separator in separators where string.contains(separator) {
+            return separator
         }
-        
+
         return nil
     }
 }

@@ -5,16 +5,17 @@
 //  Created by Harry Tran on 27/12/2023.
 //
 
-import XCTest
 @testable import DateTimeExtractor
+import XCTest
+
+// swiftlint:disable line_length
 
 final class DateYMDExtractorTests: XCTestCase {
-    
     private let extractor = DateYMDExtractor()
-    
+
     func testInvalidDateShouldNotRecognize() {
         let dateStrings = [
-            "2023-12-32", "2023-13-00", "2023-12-0", "1599-01-01", "10001-2-28", "2023-2-12", "2023-12-1", "23-12-12",
+            "2023-12-32", "2023-13-00", "2023-12-0", "1599-01-01", "10001-2-28", "2023-2-12", "2023-12-1", "23-12-12"
         ]
         for (index, dateString) in dateStrings.enumerated() {
             let results = extractor.extractDateStringAndFormat(string: dateString)
@@ -22,7 +23,7 @@ final class DateYMDExtractorTests: XCTestCase {
             XCTAssertTrue(results.isEmpty, message)
         }
     }
-    
+
     func testInvalidDateMonthNameStringShouldNotRecognize() {
         let dateStrings = [
             // Hyphen
@@ -32,14 +33,14 @@ final class DateYMDExtractorTests: XCTestCase {
             "2500-02-29", "2600-02-29", "1803-02-29", "1905-02-29", "2007-02-29", "2109-02-29", "2211-02-29",
             "2323-02-29", "2537-02-29", "2649-02-29", "2761-02-29", "2873-02-29", "2985-02-29"
         ]
-        
+
         for (index, dateString) in dateStrings.enumerated() {
             let results = extractor.extractDateStringAndFormat(string: dateString)
             let message = "Fail with \(dateString). Index \(index)"
             XCTAssertTrue(results.isEmpty, message)
         }
     }
-    
+
     func testValidDate() {
         let paragraph = """
         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -49,7 +50,7 @@ final class DateYMDExtractorTests: XCTestCase {
         2009-10-01 1992-12-01 2012-01-11 1699-01-10 2999-09-19 9000-01-10 1800-09-19
         1992-12-19 2012-01-20 2008-09-28 1902-01-21 9212-09-27 1945-10-24 9009-11-25
         """
-        
+
         let expectedResults = [
             ExtractedDateResult(original: "1600-01-31", range: NSRange(location: 113, length: 10), day: "31", month: "01", year: "1600", formatType: .YMD),
             ExtractedDateResult(original: "1999-03-31", range: NSRange(location: 124, length: 10), day: "31", month: "03", year: "1999", formatType: .YMD),
@@ -77,10 +78,10 @@ final class DateYMDExtractorTests: XCTestCase {
             ExtractedDateResult(original: "1945-10-24", range: NSRange(location: 366, length: 10), day: "24", month: "10", year: "1945", formatType: .YMD),
             ExtractedDateResult(original: "9009-11-25", range: NSRange(location: 377, length: 10), day: "25", month: "11", year: "9009", formatType: .YMD)
         ]
-        
+
         let results = extractor.extractDateStringAndFormat(string: paragraph)
-            .sorted(by: { $0.range.location < $1.range.location } )
-        
+            .sorted(by: { $0.range.location < $1.range.location })
+
         XCTAssertEqual(results.count, expectedResults.count)
         for (index, result) in results.enumerated() {
             let message = "Fail with index \(index)"

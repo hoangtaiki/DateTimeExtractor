@@ -1,6 +1,6 @@
 //
 //  MatchedResult.swift
-//  
+//
 //
 //  Created by Harry Tran on 20/12/2023.
 //

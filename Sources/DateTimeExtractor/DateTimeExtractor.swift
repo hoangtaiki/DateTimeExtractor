@@ -14,12 +14,11 @@ public enum SupportedDateTimeType {
 }
 
 public struct DateTimeExtractor {
-    
     private var dateExtractor: DateExtractable
     private var timezone: TimeZone
     private var supportedDateTimeTypes: [SupportedDateTimeType]
     private let timeExtractor = TimeExtractor()
-    
+
     public init(dateExtractor: DateExtractable,
                 supportedDateTimeTypes: [SupportedDateTimeType] = [.bothDateAndTime, .onlyDate],
                 timezone: TimeZone = TimeZone.current) {
@@ -27,22 +26,22 @@ public struct DateTimeExtractor {
         self.supportedDateTimeTypes = supportedDateTimeTypes
         self.timezone = timezone
     }
-    
+
     public func extractDate(string: String) -> [Date] {
         let dateResults = dateExtractor.extractDateStringAndFormat(string: string)
-            .sorted(by: { $0.range.location < $1.range.location } )
+            .sorted(by: { $0.range.location < $1.range.location })
         let timeResults = timeExtractor.extractDateStringAndFormat(string: string)
-            .sorted(by: { $0.range.location < $1.range.location } )
-        
-        if dateResults.isEmpty && timeResults.isEmpty {
+            .sorted(by: { $0.range.location < $1.range.location })
+
+        if dateResults.isEmpty, timeResults.isEmpty {
             return []
         }
-        
+
         let groupingResult = groupDateAndTimeResults(dateResults: dateResults, timeResults: timeResults)
         var dates = groupingResult.adjacentResults
             .map { $0.dateResult.getDate(withTimeResult: $0.timeResult, timezone: timezone) }
             .compactMap { $0 }
-        
+
         if supportedDateTimeTypes.contains(.onlyDate) {
             let onlyDates = groupingResult.remainingDates.map { $0.getDate(timezone: timezone) }.compactMap { $0 }
             dates.append(contentsOf: onlyDates)
@@ -60,39 +59,38 @@ public struct DateTimeExtractor {
 }
 
 private extension DateTimeExtractor {
-    
     struct ParsedDateTime {
         let dateResult: ExtractedDateResult
         let timeResult: ExtractedTimeResult
     }
-    
+
     struct DateAndTimeGroupingResult {
         var adjacentResults: [ParsedDateTime]
         var remainingDates: [ExtractedDateResult]
         var remainingTimes: [ExtractedTimeResult]
     }
-    
+
     struct ExtractedItemRange {
         enum ItemType {
             case date
             case time
         }
-        
+
         var index: Int
         var itemType: ItemType
         var range: NSRange
     }
-    
-    func groupDateAndTimeResults(dateResults: [ExtractedDateResult], 
+
+    func groupDateAndTimeResults(dateResults: [ExtractedDateResult],
                                  timeResults: [ExtractedTimeResult]) -> DateAndTimeGroupingResult {
-        let dateItemRanges = dateResults.enumerated().map { (index, element) in
+        let dateItemRanges = dateResults.enumerated().map { index, element in
             ExtractedItemRange(index: index, itemType: .date, range: element.range)
         }
-        let timeItemRanges = timeResults.enumerated().map { (index, element) in
+        let timeItemRanges = timeResults.enumerated().map { index, element in
             ExtractedItemRange(index: index, itemType: .time, range: element.range)
         }
         var itemRanges = dateItemRanges + timeItemRanges
-        itemRanges = itemRanges.sorted(by: { $0.range.location < $1.range.location } )
+        itemRanges = itemRanges.sorted(by: { $0.range.location < $1.range.location })
 
         var adjacentResults: [ParsedDateTime] = []
         // Track which source-array elements got paired so the remainders can be
@@ -131,22 +129,22 @@ private extension DateTimeExtractor {
         let remainingTimes = timeResults.enumerated()
             .filter { !consumedTimeIndices.contains($0.offset) }.map { $0.element }
 
-        let result = DateAndTimeGroupingResult(adjacentResults: adjacentResults,
-                                               remainingDates: remainingDates,
-                                               remainingTimes: remainingTimes)
-        return result
+        return DateAndTimeGroupingResult(adjacentResults: adjacentResults,
+                                         remainingDates: remainingDates,
+                                         remainingTimes: remainingTimes)
     }
-    
+
     func shouldCombine(_ leftItemRange: ExtractedItemRange, _ rightItemRange: ExtractedItemRange) -> Bool {
         return (leftItemRange.itemType == .date && rightItemRange.itemType == .time) ||
-        (leftItemRange.itemType == .time && rightItemRange.itemType == .date)
+            (leftItemRange.itemType == .time && rightItemRange.itemType == .date)
     }
-    
-    func determineDateAndTimeIndices(_ leftItemRange: ExtractedItemRange, _ rightItemRange: ExtractedItemRange) -> (dateIndex: Int, timeIndex: Int) {
+
+    func determineDateAndTimeIndices(_ leftItemRange: ExtractedItemRange,
+                                     _ rightItemRange: ExtractedItemRange) -> (dateIndex: Int, timeIndex: Int) {
         return (leftItemRange.itemType == .date ? leftItemRange.index : rightItemRange.index,
                 leftItemRange.itemType == .time ? leftItemRange.index : rightItemRange.index)
     }
-    
+
     /// Max number of separator characters tolerated between a date and a time
     /// for them to still be treated as adjacent (e.g. ", " or a double space).
     /// Kept tight so unrelated nearby values are not merged.

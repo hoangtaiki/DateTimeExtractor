@@ -8,13 +8,11 @@
 import Foundation
 
 public struct TimeExtractor {
-    
+    // swiftlint:disable:next line_length - single regex literal, cannot be wrapped
     private let regexPattern: String = "(?:^|\\s|-)\\b((?:1[012]|0?[1-9]):([0-5][0-9])(?::[0-5][0-9])?((\\s?(am|pm))|(a|p))?|((1[3-9]|2[0-3]):[0-5][0-9](?::[0-5][0-9])?))\\b(?:(?!:))"
-    
-    public init() {
-        
-    }
-    
+
+    public init() {}
+
     public func extractDateStringAndFormat(string: String) -> [ExtractedTimeResult] {
         var timeStringFormats = [ExtractedTimeResult]()
 
@@ -27,7 +25,7 @@ public struct TimeExtractor {
 
                 if dateComponents.count == 2 {
                     formatComponents.setHourValue(dateComponents[0])
-                    
+
                     let lastComponent = dateComponents[1]
                     if lastComponent.contains(" ") {
                         let components = lastComponent.components(separatedBy: " ")
@@ -55,29 +53,29 @@ public struct TimeExtractor {
                         let pattern = "([0-5]?\\d)"
                         if let dateString = extractStringWithRegex(string: lastComponent, regexPattern: pattern).first?.string {
                             formatComponents.setSecondValue(dateString)
-                            
+
                             let suffix = lastComponent.replacingOccurrences(of: dateString, with: "")
                             formatComponents.setAMPM(suffix)
                         }
                     }
                 }
-                
+
                 let format = ExtractedTimeResult(originalString: matchedResult.string,
                                                  range: matchedResult.range,
                                                  formatComponents: formatComponents)
                 timeStringFormats.append(format)
             }
         }
-        
+
         return timeStringFormats
     }
-    
+
     func extractStringWithRegex(string: String, regexPattern: String) -> [MatchedResult] {
         let options: NSRegularExpression.Options = [.caseInsensitive]
         guard let regex = try? NSRegularExpression(pattern: regexPattern, options: options) else {
             return []
         }
-        
+
         let range = NSRange(location: 0, length: string.utf16.count)
         let matches = regex.matches(in: string, range: range)
         var matchedResults = [MatchedResult]()
@@ -85,7 +83,7 @@ public struct TimeExtractor {
             let matchedString = (string as NSString).substring(with: match.range(at: 1))
             matchedResults.append(MatchedResult(string: matchedString, range: match.range(at: 1)))
         }
-        
+
         return matchedResults
     }
 }

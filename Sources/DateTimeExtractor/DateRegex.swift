@@ -1,6 +1,6 @@
 //
-//  File.swift
-//  
+//  DateRegex.swift
+//
 //
 //  Created by Harry Tran on 19/12/2023.
 //
@@ -17,4 +17,3 @@ public struct DateRegex {
     public let formatType: DateFormatType
     public let pattern: String
 }
-

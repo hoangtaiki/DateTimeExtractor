@@ -1,15 +1,16 @@
 //
 //  DateDMYExtractorTests.swift
-//  
+//
 //
 //  Created by Harry Tran on 19/12/2023.
 //
 
-import XCTest
 @testable import DateTimeExtractor
+import XCTest
+
+// swiftlint:disable line_length
 
 final class DateDMYExtractorTests: XCTestCase {
-    
     private let extractor = DateDMYExtractor()
     private let data = TestsData()
 
@@ -33,7 +34,7 @@ final class DateDMYExtractorTests: XCTestCase {
             "d31 12 2023", "31 12 2023d", "31 12 23d", "invalidecember 31 2023", "01 1 223",
             // Mixing
             "31/12.23", "01/02 1992", "28/2-1898", "1.5/12", "30.oct 1782", "28.feb-2024",
-            "02-may/13", "30-september.1990", "10-02 23", "01 01 23", "31 12 2023",
+            "02-may/13", "30-september.1990", "10-02 23", "01 01 23", "31 12 2023"
         ]
         for (index, dateString) in dateStrings.enumerated() {
             let results = extractor.extractDateStringAndFormat(string: dateString)
@@ -41,12 +42,12 @@ final class DateDMYExtractorTests: XCTestCase {
             XCTAssertTrue(results.isEmpty, message)
         }
     }
-    
+
     func testInvalidDateDayMonthYearShouldNotRecognize() {
         let dateStrings = [
             // Slash
             "31/02/2023", "31/feb/2023", "31/february/2023", "31/02/23", "31/feb/23", "31/february/23",
-            "31/06/2023", "31/jun/2023", "31/06/23",  "31/jun/23",
+            "31/06/2023", "31/jun/2023", "31/06/23", "31/jun/23",
             "31/09/2023", "31/sep/2023", "31/september/2023", "31/09/23", "31/sep/23", "31/september/23",
             "31/11/2023", "31/nov/2023", "31/november/2023", "31/11/23", "31/nov/23", "31/november/23",
             "31/2/2023", "31/2/23",
@@ -57,7 +58,7 @@ final class DateDMYExtractorTests: XCTestCase {
             "29/2/2023", "29/2/23",
             // Dot
             "31.02.2023", "31.feb.2023", "31.february.2023", "31.02.23", "31.feb.23", "31.february.23",
-            "31.06.2023", "31.jun.2023", "31.06.23",  "31.jun.23",
+            "31.06.2023", "31.jun.2023", "31.06.23", "31.jun.23",
             "31.09.2023", "31.sep.2023", "31.september.2023", "31.09.23", "31.sep.23", "31.september.23",
             "31.11.2023", "31.nov.2023", "31.november.2023", "31.11.23", "31.nov.23", "31.november.23",
             "31.2.2023", "31.2.23",
@@ -95,28 +96,28 @@ final class DateDMYExtractorTests: XCTestCase {
             XCTAssertTrue(results.isEmpty, message)
         }
     }
-    
+
     func testValidDateSlashFormat() {
         let paragraph = data.paragraphSlashFormat
         let expectedResults = data.expectedResultsSlashFormat
-        
+
         let results = extractor.extractDateStringAndFormat(string: paragraph)
-            .sorted(by: { $0.range.location < $1.range.location } )
-        
+            .sorted(by: { $0.range.location < $1.range.location })
+
         XCTAssertEqual(results.count, expectedResults.count)
         for (index, result) in results.enumerated() {
             let message = "Fail with index \(index)"
             XCTAssertEqual(result, expectedResults[index], message)
         }
     }
-    
+
     func testValidDateDotFormat() {
         let paragraph = data.paragraphSlashFormat.replacingOccurrences(of: "/", with: ".")
         let expectedResults = data.expectedResultsSlashFormat
-        
+
         let results = extractor.extractDateStringAndFormat(string: paragraph)
-            .sorted(by: { $0.range.location < $1.range.location } )
-        
+            .sorted(by: { $0.range.location < $1.range.location })
+
         XCTAssertEqual(results.count, expectedResults.count)
         for (index, result) in results.enumerated() {
             let message = "Fail with index \(index)"
@@ -126,14 +127,14 @@ final class DateDMYExtractorTests: XCTestCase {
             XCTAssertEqual(result.formatComponents.getFormattedString(), expectedResult.formatComponents.getFormattedString(), message)
         }
     }
-    
+
     func testValidDateHyphenFormat() {
         let paragraph = data.paragraphSlashFormat.replacingOccurrences(of: "/", with: "-")
         let expectedResults = data.expectedResultsSlashFormat
-        
+
         let results = extractor.extractDateStringAndFormat(string: paragraph)
-            .sorted(by: { $0.range.location < $1.range.location } )
-        
+            .sorted(by: { $0.range.location < $1.range.location })
+
         XCTAssertEqual(results.count, expectedResults.count)
         for (index, result) in results.enumerated() {
             let message = "Fail with index \(index)"
@@ -143,13 +144,13 @@ final class DateDMYExtractorTests: XCTestCase {
             XCTAssertEqual(result.formatComponents.getFormattedString(), expectedResult.formatComponents.getFormattedString(), message)
         }
     }
-    
+
     func testValidDateSpaceFormat() {
         let paragraph = data.paragraphSpaceFormat
         let expectedResults = data.expectedResultsSpaceFormat
-        
+
         let results = extractor.extractDateStringAndFormat(string: paragraph)
-            .sorted(by: { $0.range.location < $1.range.location } )
+            .sorted(by: { $0.range.location < $1.range.location })
 
         for (index, result) in results.enumerated() {
             let message = "Fail with index \(index)"
@@ -159,7 +160,6 @@ final class DateDMYExtractorTests: XCTestCase {
 }
 
 private struct TestsData {
-    
     let paragraphSlashFormat = """
     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
     1. These are many single dates which can be recognized:
@@ -197,7 +197,7 @@ private struct TestsData {
     31/1/23/31/05/2023
     31/12/23/
     """
-    
+
     let expectedResultsSlashFormat = [
         ExtractedDateResult(original: "31/01/1600", range: NSRange(location: 113, length: 10), day: "31", month: "01", year: "1600", formatType: .DMY),
         ExtractedDateResult(original: "31/03/1999", range: NSRange(location: 124, length: 10), day: "31", month: "03", year: "1999", formatType: .DMY),
@@ -335,7 +335,7 @@ private struct TestsData {
         ExtractedDateResult(original: "31/05/2023", range: NSRange(location: 1674, length: 10), day: "31", month: "05", year: "2023", formatType: .DMY),
         ExtractedDateResult(original: "31/12/23", range: NSRange(location: 1685, length: 8), day: "31", month: "12", year: "23", formatType: .DMY)
     ]
-    
+
     let paragraphSpaceFormat = """
     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
     31 Jan 91 31 January 01 31 Mar 2023 31 March 23 31 May 1756 31 July 2023 31 Jul 2023 31 Aug 2023 31 August 2023 
@@ -347,7 +347,7 @@ private struct TestsData {
     29 November 90 29 Dec 23 29 December 23 29 Feb 1648 29 February 2012 01 Jan 24 09 Sep 12
     1 Oct 12 9 Dec 12 10 Jan 11 19 Sep 1992 10 Nov 11 22 Nov 34 26 Dec 6790 24 jan 2022
     """
-    
+
     let expectedResultsSpaceFormat = [
         ExtractedDateResult(original: "31 Jan 91", range: NSRange(location: 57, length: 9), day: "31", month: "Jan", year: "91", formatType: .DMY),
         ExtractedDateResult(original: "31 January 01", range: NSRange(location: 67, length: 13), day: "31", month: "January", year: "01", formatType: .DMY),

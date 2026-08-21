@@ -8,18 +8,17 @@
 import Foundation
 
 public struct DateExtractor: DateExtractable {
-
     public private(set) var prioritizedFormatType: DateFormatType = .MDY
     public private(set) var extractors: [DateExtractable] = []
 
     public init(prioritizedFormatType: DateFormatType = .MDY) {
         self.prioritizedFormatType = prioritizedFormatType
     }
-    
+
     public mutating func setPrioritizedFormatType(_ prioritizedFormatType: DateFormatType) {
         self.prioritizedFormatType = prioritizedFormatType
     }
-    
+
     public mutating func registerDefaultExtractors() {
         let dmyExtractor = DateDMYExtractor()
         extractors.append(dmyExtractor)
@@ -46,7 +45,7 @@ public struct DateExtractor: DateExtractable {
             .map { $0.first(where: { $0.formatComponents.formatType == self.prioritizedFormatType }) }
             .compactMap { $0 }
         uniqueRangeItems.append(contentsOf: sameRangeItems)
-        
+
         return uniqueRangeItems
     }
 }
