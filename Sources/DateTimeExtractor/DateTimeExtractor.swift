@@ -47,7 +47,14 @@ public struct DateTimeExtractor {
             let onlyDates = groupingResult.remainingDates.map { $0.getDate(timezone: timezone) }.compactMap { $0 }
             dates.append(contentsOf: onlyDates)
         }
-        
+
+        // Times with no adjacent date are anchored to the current day, so these
+        // results are inherently non-deterministic (they depend on "now").
+        if supportedDateTimeTypes.contains(.onlyTime) {
+            let onlyTimes = groupingResult.remainingTimes.compactMap { $0.setTimeForDate(timezone: timezone) }
+            dates.append(contentsOf: onlyTimes)
+        }
+
         return dates
     }
 }
@@ -88,38 +95,42 @@ private extension DateTimeExtractor {
         itemRanges = itemRanges.sorted(by: { $0.range.location < $1.range.location } )
 
         var adjacentResults: [ParsedDateTime] = []
-        var remainingDates: [ExtractedDateResult] = dateResults
-        var remainingTimes: [ExtractedTimeResult] = timeResults
-        
+        // Track which source-array elements got paired so the remainders can be
+        // rebuilt from the originals. Removing from live copies mid-loop would
+        // shift these indices and corrupt the result.
+        var consumedDateIndices: Set<Int> = []
+        var consumedTimeIndices: Set<Int> = []
+
         var leftIndex = 0
-        var rightIndex = 1
-        while leftIndex < itemRanges.count && rightIndex < itemRanges.count {
+        while leftIndex + 1 < itemRanges.count {
             let leftItemRange = itemRanges[leftIndex]
-            let rightItemRange = itemRanges[rightIndex]
+            let rightItemRange = itemRanges[leftIndex + 1]
             if shouldCombine(leftItemRange, rightItemRange) {
                 let (dateIndex, timeIndex) = determineDateAndTimeIndices(leftItemRange, rightItemRange)
                 let dateItem = dateResults[dateIndex]
                 let timeItem = timeResults[timeIndex]
-                
+
                 if areRangesAdjacent(dateItem.range, timeItem.range) {
                     let combinedResult = ParsedDateTime(dateResult: dateItem, timeResult: timeItem)
                     adjacentResults.append(combinedResult)
-                    
-                    remainingDates.removeAll(where: { $0.range == dateItem.range })
-                    remainingTimes.removeAll(where: { $0.range == timeItem.range })
-                    
+
+                    consumedDateIndices.insert(dateIndex)
+                    consumedTimeIndices.insert(timeIndex)
+
                     leftIndex += 2
-                    rightIndex += 2
                 } else {
                     leftIndex += 1
-                    rightIndex += 1
                 }
             } else {
                 leftIndex += 1
-                rightIndex += 1
             }
         }
-        
+
+        let remainingDates = dateResults.enumerated()
+            .filter { !consumedDateIndices.contains($0.offset) }.map { $0.element }
+        let remainingTimes = timeResults.enumerated()
+            .filter { !consumedTimeIndices.contains($0.offset) }.map { $0.element }
+
         let result = DateAndTimeGroupingResult(adjacentResults: adjacentResults,
                                                remainingDates: remainingDates,
                                                remainingTimes: remainingTimes)
@@ -133,12 +144,19 @@ private extension DateTimeExtractor {
     
     func determineDateAndTimeIndices(_ leftItemRange: ExtractedItemRange, _ rightItemRange: ExtractedItemRange) -> (dateIndex: Int, timeIndex: Int) {
         return (leftItemRange.itemType == .date ? leftItemRange.index : rightItemRange.index,
-                leftItemRange.itemType == .time ? rightItemRange.index : rightItemRange.index)
+                leftItemRange.itemType == .time ? leftItemRange.index : rightItemRange.index)
     }
     
+    /// Max number of separator characters tolerated between a date and a time
+    /// for them to still be treated as adjacent (e.g. ", " or a double space).
+    /// Kept tight so unrelated nearby values are not merged.
+    static let maxAdjacencyGap = 3
+
     func areRangesAdjacent(_ range1: NSRange, _ range2: NSRange) -> Bool {
-        let case1 = range2.location == range1.location + range1.length + 1
-        let case2 = range1.location == range2.location + range2.length + 1
-        return case1 || case2
+        // Gap = characters strictly between the two ranges (0 = touching).
+        let case1 = range2.location - (range1.location + range1.length)
+        let case2 = range1.location - (range2.location + range2.length)
+        let gap = max(case1, case2)
+        return gap >= 0 && gap <= Self.maxAdjacencyGap
     }
 }

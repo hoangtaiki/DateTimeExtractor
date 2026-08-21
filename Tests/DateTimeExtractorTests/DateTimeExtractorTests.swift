@@ -65,6 +65,76 @@ final class DateTimeExtractorTests: XCTestCase {
             XCTAssertEqual(dates[index], date)
         }
     }
+
+    // A time preceding its date must pair with the correct time even when the
+    // date's index in `dateResults` differs from the time's index in
+    // `timeResults`. Here there is a single time (index 0) but two dates, and
+    // the time-before-date pairing targets the second date (index 1); the old
+    // code indexed `timeResults[1]` and crashed.
+    func testTimeBeforeDateWithDivergingIndices() {
+        let paragraph = "01/02/2023 then 3:45pm 09/06/2023"
+        let laTimezone = TimeZone(identifier: "America/Los_Angeles")!
+
+        let expectedDates = [
+            createDate(day: 1, month: 2, year: 2023, hour: 0, minute: 0, second: 0, timeZone: laTimezone),
+            createDate(day: 9, month: 6, year: 2023, hour: 15, minute: 45, second: 0, timeZone: laTimezone)
+        ]
+
+        let sut = createSUT(prioritizedFormatType: .DMY,
+                            supportedDateTimeTypes: [.bothDateAndTime, .onlyDate],
+                            timezone: laTimezone)
+        let dates = sut.extractDate(string: paragraph).sorted(by: { $0 < $1 })
+        XCTAssertEqual(dates.count, expectedDates.count)
+        for (index, date) in expectedDates.enumerated() {
+            XCTAssertEqual(dates[index], date)
+        }
+    }
+
+    // `.onlyTime` results are anchored to the current day, so assert on the
+    // time-of-day components rather than an absolute Date.
+    func testOnlyTimeSupport() {
+        let paragraph = "Current time is 11:47 AM"
+        let laTimezone = TimeZone(identifier: "America/Los_Angeles")!
+
+        let sut = createSUT(prioritizedFormatType: .DMY,
+                            supportedDateTimeTypes: [.onlyTime],
+                            timezone: laTimezone)
+        let dates = sut.extractDate(string: paragraph)
+        XCTAssertEqual(dates.count, 1)
+
+        var calendar = Calendar.current
+        calendar.timeZone = laTimezone
+        let components = calendar.dateComponents([.hour, .minute], from: dates[0])
+        XCTAssertEqual(components.hour, 11)
+        XCTAssertEqual(components.minute, 47)
+    }
+
+    // A comma + double space (gap of 3) between date and time must still merge.
+    func testAdjacencyToleratesSmallSeparatorGap() {
+        let paragraph = "23/12/2023,  11:47 AM"
+        let laTimezone = TimeZone(identifier: "America/Los_Angeles")!
+
+        let expected = createDate(day: 23, month: 12, year: 2023, hour: 11, minute: 47, second: 0, timeZone: laTimezone)
+
+        let sut = createSUT(prioritizedFormatType: .DMY,
+                            supportedDateTimeTypes: [.bothDateAndTime],
+                            timezone: laTimezone)
+        let dates = sut.extractDate(string: paragraph)
+        XCTAssertEqual(dates.count, 1)
+        XCTAssertEqual(dates.first, expected)
+    }
+
+    // A date and time separated by many words must NOT be merged.
+    func testDistantDateAndTimeDoNotMerge() {
+        let paragraph = "23/12/2023 is the date and the time is 11:47 AM"
+        let laTimezone = TimeZone(identifier: "America/Los_Angeles")!
+
+        let sut = createSUT(prioritizedFormatType: .DMY,
+                            supportedDateTimeTypes: [.bothDateAndTime],
+                            timezone: laTimezone)
+        let dates = sut.extractDate(string: paragraph)
+        XCTAssertEqual(dates.count, 0)
+    }
 }
 
 private extension DateTimeExtractorTests {
