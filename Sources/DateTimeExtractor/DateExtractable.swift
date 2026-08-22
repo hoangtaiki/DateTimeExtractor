@@ -20,6 +20,10 @@ public extension DateExtractable {
             return []
         }
 
+        return extractStringWithRegex(string: string, regex: regex)
+    }
+
+    func extractStringWithRegex(string: String, regex: NSRegularExpression) -> [MatchedResult] {
         let range = NSRange(location: 0, length: string.utf16.count)
         let matches = regex.matches(in: string, range: range)
         var matchedResults = [MatchedResult]()

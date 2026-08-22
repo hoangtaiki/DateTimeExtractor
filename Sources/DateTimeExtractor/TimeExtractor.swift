@@ -8,15 +8,18 @@
 import Foundation
 
 public struct TimeExtractor {
-    // swiftlint:disable:next line_length - single regex literal, cannot be wrapped
-    private let regexPattern: String = "(?:^|\\s|-)\\b((?:1[012]|0?[1-9]):([0-5][0-9])(?::[0-5][0-9])?((\\s?(am|pm))|(a|p))?|((1[3-9]|2[0-3]):[0-5][0-9](?::[0-5][0-9])?))\\b(?:(?!:))"
+    // swiftlint:disable:next line_length force_try - single fixed literal regex, cannot be wrapped; compile failure is a build-time bug
+    private static let compiledRegex = try! NSRegularExpression(pattern: "(?:^|\\s|-)\\b((?:1[012]|0?[1-9]):([0-5][0-9])(?::[0-5][0-9])?((\\s?(am|pm))|(a|p))?|((1[3-9]|2[0-3]):[0-5][0-9](?::[0-5][0-9])?))\\b(?:(?!:))", options: [.caseInsensitive])
+
+    // swiftlint:disable:next force_try - fixed literal regex, compile failure is a build-time bug
+    private static let minuteSecondRegex = try! NSRegularExpression(pattern: "([0-5]?\\d)", options: [.caseInsensitive])
 
     public init() {}
 
     public func extractDateStringAndFormat(string: String) -> [ExtractedTimeResult] {
         var timeStringFormats = [ExtractedTimeResult]()
 
-        let matchedResults = extractStringWithRegex(string: string, regexPattern: regexPattern)
+        let matchedResults = extractStringWithRegex(string: string, regex: Self.compiledRegex)
         if !matchedResults.isEmpty {
             for matchedResult in matchedResults {
                 let extractedString = matchedResult.string
@@ -32,8 +35,7 @@ public struct TimeExtractor {
                         formatComponents.setMinuteValue(components[0])
                         formatComponents.setAMPM(components[1])
                     } else {
-                        let pattern = "([0-5]?\\d)"
-                        if let dateString = extractStringWithRegex(string: lastComponent, regexPattern: pattern).first?.string {
+                        if let dateString = extractStringWithRegex(string: lastComponent, regex: Self.minuteSecondRegex).first?.string {
                             formatComponents.setMinuteValue(dateString)
 
                             let suffix = lastComponent.replacingOccurrences(of: dateString, with: "")
@@ -50,8 +52,7 @@ public struct TimeExtractor {
                         formatComponents.setSecondValue(components[0])
                         formatComponents.setAMPM(components[1])
                     } else {
-                        let pattern = "([0-5]?\\d)"
-                        if let dateString = extractStringWithRegex(string: lastComponent, regexPattern: pattern).first?.string {
+                        if let dateString = extractStringWithRegex(string: lastComponent, regex: Self.minuteSecondRegex).first?.string {
                             formatComponents.setSecondValue(dateString)
 
                             let suffix = lastComponent.replacingOccurrences(of: dateString, with: "")
@@ -70,12 +71,7 @@ public struct TimeExtractor {
         return timeStringFormats
     }
 
-    func extractStringWithRegex(string: String, regexPattern: String) -> [MatchedResult] {
-        let options: NSRegularExpression.Options = [.caseInsensitive]
-        guard let regex = try? NSRegularExpression(pattern: regexPattern, options: options) else {
-            return []
-        }
-
+    func extractStringWithRegex(string: String, regex: NSRegularExpression) -> [MatchedResult] {
         let range = NSRange(location: 0, length: string.utf16.count)
         let matches = regex.matches(in: string, range: range)
         var matchedResults = [MatchedResult]()

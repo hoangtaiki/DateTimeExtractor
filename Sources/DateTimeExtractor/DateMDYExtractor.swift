@@ -31,7 +31,8 @@ public struct DateMDYExtractor: DateExtractable {
         var results = [ExtractedDateResult]()
 
         for regex in regexes {
-            let matchedResults = extractStringWithRegex(string: string, regexPattern: regex.pattern)
+            guard let compiled = regex.compiledRegex else { continue }
+            let matchedResults = extractStringWithRegex(string: string, regex: compiled)
 
             if !matchedResults.isEmpty {
                 for matchedResult in matchedResults {

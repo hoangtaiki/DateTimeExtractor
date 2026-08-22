@@ -8,13 +8,13 @@
 import Foundation
 
 public struct DateYMDExtractor: DateExtractable {
-    // swiftlint:disable:next line_length - single regex literal, cannot be wrapped
-    private let regex = "\\b(?:(?:1[6-9]|[2-9]\\d)\\d{2})(-)(?:(?:(?:0[13578]|1[02])\\1(?:31))|(?:(?:0[1,3-9]|1[0-2])\\1(?:(?:29|30))))\\b|\\b(?:(?:(?:1[6-9]|[2-9]\\d)(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(-)(?:02)\\2?29\\b|\\b(?:(?:1[6-9]|[2-9]\\d)\\d{2})(-)(?:(?:0[1-9])|(?:1[0-2]))\\3(?:0[1-9]|1\\d|2[0-8])\\b"
+    // swiftlint:disable:next line_length force_try - single fixed literal regex, cannot be wrapped; compile failure is a build-time bug
+    private static let compiledRegex = try! NSRegularExpression(pattern: "\\b(?:(?:1[6-9]|[2-9]\\d)\\d{2})(-)(?:(?:(?:0[13578]|1[02])\\1(?:31))|(?:(?:0[1,3-9]|1[0-2])\\1(?:(?:29|30))))\\b|\\b(?:(?:(?:1[6-9]|[2-9]\\d)(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(-)(?:02)\\2?29\\b|\\b(?:(?:1[6-9]|[2-9]\\d)\\d{2})(-)(?:(?:0[1-9])|(?:1[0-2]))\\3(?:0[1-9]|1\\d|2[0-8])\\b", options: [.caseInsensitive])
 
     public func extractDateStringAndFormat(string: String) -> [ExtractedDateResult] {
         var results = [ExtractedDateResult]()
 
-        let matchedResults = extractStringWithRegex(string: string, regexPattern: regex)
+        let matchedResults = extractStringWithRegex(string: string, regex: Self.compiledRegex)
 
         if !matchedResults.isEmpty {
             for matchedResult in matchedResults {

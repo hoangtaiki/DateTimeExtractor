@@ -35,14 +35,12 @@ public struct ExtractedTimeResult: Equatable {
 public extension ExtractedTimeResult {
     func setTimeForDate(date: Date = Date(), timezone: TimeZone) -> Date? {
         let dateFormat = "dd-MM-yyyy"
-        let dateFormatter = DateFormatter()
-        dateFormatter.timeZone = timezone
-        dateFormatter.dateFormat = dateFormat
+        let dateFormatter = DateFormatterCache.formatter(format: dateFormat, timezone: timezone)
         let formattedDate = dateFormatter.string(from: date)
 
         let dateTimeString = "\(formattedDate) \(formatComponents.getFormattedString())"
         let dateTimeFormat = "\(dateFormat) \(formatComponents.getFormat())"
-        dateFormatter.dateFormat = dateTimeFormat
-        return dateFormatter.date(from: dateTimeString)
+        let dateTimeFormatter = DateFormatterCache.formatter(format: dateTimeFormat, timezone: timezone)
+        return dateTimeFormatter.date(from: dateTimeString)
     }
 }
