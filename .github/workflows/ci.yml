@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test-macos:
+    name: Test on macOS
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build
+        run: swift build -v
+
+      - name: Run tests
+        run: swift test -v
+
+  test-linux:
+    name: Test on Linux (Swift ${{ matrix.swift }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        swift: ['5.9', '5.10']
+    container:
+      image: swift:${{ matrix.swift }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build
+        run: swift build -v
+
+      - name: Run tests
+        run: swift test -v
+
+  lint:
+    name: SwiftLint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run SwiftLint
+        uses: realm/SwiftLint@main
+        with:
+          args: --strict

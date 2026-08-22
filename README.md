@@ -1,5 +1,11 @@
 # DateTimeExtractor
 
+[![CI](https://github.com/duchoangvp/DateTimeExtractor/actions/workflows/ci.yml/badge.svg)](https://github.com/duchoangvp/DateTimeExtractor/actions/workflows/ci.yml)
+[![Swift Version Compatibility](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fduchoangvp%2FDateTimeExtractor%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/duchoangvp/DateTimeExtractor)
+[![Platform Compatibility](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fduchoangvp%2FDateTimeExtractor%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/duchoangvp/DateTimeExtractor)
+[![SPM compatible](https://img.shields.io/badge/SPM-compatible-brightgreen.svg)](https://swift.org/package-manager/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 A dependency-free Swift package that extracts dates and times from free-form text - OCR output, receipts, and natural-language strings. Given a string, it returns an array of `Date` values for every date/time it recognises.
 
 It is regex-based (no NLP, no network) so it runs fully on-device and is safe for privacy-sensitive input.
@@ -15,11 +21,13 @@ Swift Package Manager:
 
 ```swift
 dependencies: [
-    .package(url: "<repo-url>", from: "1.0.0")
+    .package(url: "https://github.com/duchoangvp/DateTimeExtractor.git", from: "1.0.0")
 ]
 ```
 
 Then add `"DateTimeExtractor"` to your target's dependencies.
+
+In Xcode: **File → Add Package Dependencies…** and enter `https://github.com/duchoangvp/DateTimeExtractor.git`.
 
 ## Usage
 
@@ -127,3 +135,11 @@ make test      # swift test
 make lint      # SwiftLint (non-mutating)
 make format    # SwiftFormat (mutates in place)
 ```
+
+## Contributing
+
+Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for the build/test/lint workflow and how to add a new format strategy. By participating you agree to the [Code of Conduct](CODE_OF_CONDUCT.md).
+
+## License
+
+DateTimeExtractor is available under the MIT License. See [LICENSE](LICENSE) for details.

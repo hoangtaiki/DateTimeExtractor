@@ -1,0 +1,59 @@
+name: Release
+
+# Manual only. Swift packages have no registry upload - a "release" is a SemVer
+# git tag plus a GitHub Release, which SPM and the Swift Package Index read directly.
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (SemVer, no leading v - e.g. 1.0.0)'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Tag and publish release
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate version is SemVer
+        run: |
+          if ! [[ "${{ github.event.inputs.version }}" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]; then
+            echo "::error::'${{ github.event.inputs.version }}' is not a valid SemVer version (expected e.g. 1.0.0)."
+            exit 1
+          fi
+
+      - name: Fail if tag already exists
+        run: |
+          if git rev-parse "${{ github.event.inputs.version }}" >/dev/null 2>&1; then
+            echo "::error::Tag '${{ github.event.inputs.version }}' already exists."
+            exit 1
+          fi
+
+      - name: Build
+        run: swift build -v
+
+      - name: Run tests (release gate)
+        run: swift test -v
+
+      - name: Create and push tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a "${{ github.event.inputs.version }}" -m "Release ${{ github.event.inputs.version }}"
+          git push origin "${{ github.event.inputs.version }}"
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "${{ github.event.inputs.version }}" \
+            --title "${{ github.event.inputs.version }}" \
+            --generate-notes

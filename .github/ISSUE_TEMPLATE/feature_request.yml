@@ -1,0 +1,26 @@
+name: Feature request
+description: Suggest a new format, capability, or improvement
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / motivation
+      description: What are you trying to do that the library does not support today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Describe the format or API you would like. For a new date/time format, include example strings.
+      placeholder: "Support ISO 8601 with 'T' separator, e.g. 2024-12-25T15:30:00"
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Any workarounds you currently use, or other approaches you weighed.
+    validations:
+      required: false

@@ -1,0 +1,53 @@
+name: Bug report
+description: Report incorrect or missing date/time extraction
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for filing a bug. The most useful report gives the exact input
+        string plus the result you got and the result you expected.
+  - type: textarea
+    id: input
+    attributes:
+      label: Input string
+      description: The exact string passed to `extractDate(string:)`.
+      placeholder: "Paid at Starbucks on 12/25/2024 3:30 pm"
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual result
+      description: The `Date` value(s) returned (or "empty array").
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected result
+      description: What you expected to be extracted.
+    validations:
+      required: true
+  - type: input
+    id: config
+    attributes:
+      label: Configuration
+      description: How you set up `DateTimeExtractor` (prioritizedFormatType, supportedDateTimeTypes, timezone, custom extractors).
+      placeholder: "DateExtractor() + registerDefaultExtractors(); default types; timezone .current"
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: DateTimeExtractor version (or commit) and Swift/platform.
+      placeholder: "1.0.0, Swift 5.10, iOS 17"
+    validations:
+      required: true
+  - type: textarea
+    id: extra
+    attributes:
+      label: Additional context
+      description: Anything else relevant.
+    validations:
+      required: false
