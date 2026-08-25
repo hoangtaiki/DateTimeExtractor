@@ -27,7 +27,7 @@ dependencies: [
 
 Then add `"DateTimeExtractor"` to your target's dependencies.
 
-In Xcode: **File → Add Package Dependencies…** and enter `https://github.com/duchoangvp/DateTimeExtractor.git`.
+In Xcode: **File → Add Package Dependencies…** and enter `https://github.com/hoangtaiki/DateTimeExtractor.git`.
 
 ## Usage
 
