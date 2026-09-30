@@ -1,8 +1,8 @@
 # DateTimeExtractor
 
-[![CI](https://github.com/duchoangvp/DateTimeExtractor/actions/workflows/ci.yml/badge.svg)](https://github.com/duchoangvp/DateTimeExtractor/actions/workflows/ci.yml)
-[![Swift Version Compatibility](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fduchoangvp%2FDateTimeExtractor%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/duchoangvp/DateTimeExtractor)
-[![Platform Compatibility](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fduchoangvp%2FDateTimeExtractor%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/duchoangvp/DateTimeExtractor)
+[![CI](https://github.com/hoangtaiki/DateTimeExtractor/actions/workflows/ci.yml/badge.svg)](https://github.com/hoangtaiki/DateTimeExtractor/actions/workflows/ci.yml)
+[![Swift Version Compatibility](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fhoangtaiki%2FDateTimeExtractor%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/hoangtaiki/DateTimeExtractor)
+[![Platform Compatibility](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fhoangtaiki%2FDateTimeExtractor%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/hoangtaiki/DateTimeExtractor)
 [![SPM compatible](https://img.shields.io/badge/SPM-compatible-brightgreen.svg)](https://swift.org/package-manager/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
@@ -21,7 +21,7 @@ Swift Package Manager:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/duchoangvp/DateTimeExtractor.git", from: "1.0.0")
+    .package(url: "https://github.com/hoangtaiki/DateTimeExtractor.git", from: "1.0.0")
 ]
 ```
 
@@ -48,7 +48,7 @@ let dates = extractor.extractDate(string: "Paid at Starbucks on 12/25/2024 3:30 
 
 ### Configuration
 
-`DateTimeExtractor.init` takes two optional arguments:
+`DateTimeExtractor.init` takes three optional arguments:
 
 ```swift
 let extractor = DateTimeExtractor(
